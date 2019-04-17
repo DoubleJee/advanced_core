@@ -1,4 +1,4 @@
-package design_pattern.adapter;
+package design_pattern.adapter.duck;
 
 public interface Turkey {
     /**

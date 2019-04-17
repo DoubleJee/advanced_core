@@ -1,6 +1,6 @@
-package design_pattern.adapter.impl;
+package design_pattern.adapter.duck.impl;
 
-import design_pattern.adapter.Turkey;
+import design_pattern.adapter.duck.Turkey;
 
 public class WildTurkey implements Turkey {
     @Override

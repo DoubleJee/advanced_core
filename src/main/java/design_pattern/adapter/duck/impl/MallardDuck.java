@@ -1,6 +1,6 @@
-package design_pattern.adapter.impl;
+package design_pattern.adapter.duck.impl;
 
-import design_pattern.adapter.Duck;
+import design_pattern.adapter.duck.Duck;
 
 public class MallardDuck implements Duck {
     @Override

@@ -1,4 +1,5 @@
-package design_pattern.adapter;
+package design_pattern.adapter.duck;
+
 
 //火鸡适配器 目标对象鸭子，被适配者火鸡
 public class TurkeyAdapter implements Duck {
