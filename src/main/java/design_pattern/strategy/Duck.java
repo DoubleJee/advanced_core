@@ -1,7 +1,7 @@
-package design_pattern.strategy.duck;
+package design_pattern.strategy;
 
-import design_pattern.strategy.duck.behavior.FlyBehavior;
-import design_pattern.strategy.duck.behavior.QuackBehavior;
+import design_pattern.strategy.behavior.FlyBehavior;
+import design_pattern.strategy.behavior.QuackBehavior;
 
 //鸭子类
 public abstract class Duck {

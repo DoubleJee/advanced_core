@@ -1,6 +1,6 @@
-package design_pattern.strategy.duck;
+package design_pattern.strategy;
 
-import design_pattern.strategy.duck.behavior.impl.FlyRocketPowered;
+import design_pattern.strategy.behavior.impl.FlyRocketPowered;
 
 public class MiniDuckSimulator {
     public static void main(String[] args) {

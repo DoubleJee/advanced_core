@@ -1,4 +1,4 @@
-package design_pattern.strategy.duck.behavior;
+package design_pattern.strategy.behavior;
 
 public interface FlyBehavior {
     /**
