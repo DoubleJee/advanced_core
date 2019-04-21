@@ -1,5 +1,7 @@
 package design_pattern.iterator.component;
 
+import java.util.Iterator;
+
 public class WaiterC {
 
     MenuComponent allMenus;
@@ -10,6 +12,17 @@ public class WaiterC {
 
     public void printMenu(){
         allMenus.print();
+    }
+
+    public void printVegetarianMenu(){
+        System.out.println("-----------素食-----------");
+        Iterator iterator = allMenus.createIterator();
+        while (iterator.hasNext()){
+            MenuComponent menuComponent = (MenuComponent)iterator.next();
+            if(menuComponent.isVegetarian()){
+                menuComponent.print();
+            }
+        }
     }
 
 
@@ -29,6 +42,11 @@ public class WaiterC {
 
         WaiterC waiterC = new WaiterC(allMenus);
         waiterC.printMenu();
+        waiterC.printVegetarianMenu();
+
+        //组合模式：允许你将对象组成树形结构来表现“整体/部分”的层次结构，组合能让客户以一直的方式来处理个别对象和对象组合
+
+        //菜单就是整体、对象组合（组合节点）、菜单项就是部分、个别对象（叶节点）
     }
 
 }

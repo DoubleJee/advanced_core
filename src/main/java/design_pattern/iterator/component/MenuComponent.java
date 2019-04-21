@@ -1,5 +1,7 @@
 package design_pattern.iterator.component;
 
+import java.util.Iterator;
+
 public abstract class MenuComponent {
     public void add(MenuComponent menuComponent){
 
@@ -23,11 +25,12 @@ public abstract class MenuComponent {
         return 0;
     }
     public boolean isVegetarian() {
-        return true;
+        return false;
     }
 
     public void print(){
 
     }
 
+    public abstract Iterator createIterator();
 }
