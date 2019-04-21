@@ -29,5 +29,8 @@ public class ProxyTest {
         heFeiGumballMachineMonitor.report();
 
         //代理模式：为一个对象提供一个替身或者占位符，以控制对这个对象的访问。（让代理对象控制某对象的访问吗，代理作为另一个对象的代表）
+
+
+        // 监视器（客户） -> 糖果机代理（proxy） -> 真实糖果机（realSubject）
     }
 }
