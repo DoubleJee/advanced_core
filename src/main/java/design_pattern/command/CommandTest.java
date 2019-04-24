@@ -52,6 +52,6 @@ public class CommandTest {
         remoteControl.undoButtonWasPressed();
 
         //命令模式：将请求封装成对象，这可以让你使用不同请求、队列，或者日志请求来参数化其他对象，命令模式也可以支持撤销操作。
-
+        //使请求者与实现者解耦 客户 -> 命令对象(开命令) -> 命令接受者
     }
 }
