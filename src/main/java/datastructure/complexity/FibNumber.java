@@ -30,6 +30,18 @@ public class FibNumber {
         return second;
     }
 
+    //时间复杂度：O(n)
+    public static int fib3(int n) {
+        if (n <= 1) return n;
+        int first = 0;
+        int second = 1;
+        while (n-- > 1){
+            second += first;
+            first = second - first;
+        }
+        return second;
+    }
+
     public static void main(String[] args) {
 
         TimeTool.checkTime("fb1", new TimeTool.Task() {
@@ -44,6 +56,11 @@ public class FibNumber {
                 System.out.println(fib2(45));;
             }
         });
-
+        TimeTool.checkTime("fb3", new TimeTool.Task() {
+            @Override
+            public void execute() {
+                System.out.println(fib3(45));;
+            }
+        });
     }
 }

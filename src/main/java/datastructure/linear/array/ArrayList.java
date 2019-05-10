@@ -28,6 +28,22 @@ public class ArrayList<E> {
         this(DEFAULT_CAPACITY);
     }
 
+    private void indexException(int index) {
+        throw new IndexOutOfBoundsException("Index:" + index + ",Size:" + size);
+    }
+
+    private void checkIndex(int index) {
+        if (index < 0 || index >= size) {
+            indexException(index);
+        }
+    }
+
+    private void checkIndexForAdd(int index) {
+        if (index < 0 || index > size) {
+            indexException(index);
+        }
+    }
+
     public int size() {
         return size;
     }
@@ -41,31 +57,38 @@ public class ArrayList<E> {
     }
 
     public void add(E element) {
-
+        add(size, element);
     }
 
     public void add(int index, E element) {
-        return;
+        checkIndexForAdd(index);
+        for (int i = size; i > index; i--) {
+            elements[i] = elements[i - 1];
+        }
+        elements[index] = element;
+        size++;
     }
 
     public E get(int index) {
-        if (index <= 0 || index >= size) {
-            throw new IndexOutOfBoundsException("Index:" + index + ",Size:" + size);
-        }
+        checkIndex(index);
         return (E) elements[index];
     }
 
     public E set(int index, E element) {
-        if (index <= 0 || index >= size) {
-            throw new IndexOutOfBoundsException("Index:" + index + ",Size:" + size);
-        }
+        checkIndex(index);
         E oldElement = (E) elements[index];
         elements[index] = element;
         return oldElement;
     }
 
     public E remove(int index) {
-        return null;
+        checkIndex(index);
+        E old = (E) elements[index];
+        for (int i = index + 1; i < size; i++) {
+            elements[i - 1] = elements[i];
+        }
+        size--;
+        return old;
     }
 
     //时间复杂度 O(n)
@@ -80,4 +103,17 @@ public class ArrayList<E> {
         size = 0;
     }
 
+    @Override
+    public String toString() {
+        StringBuilder stringBuilder = new StringBuilder();
+        stringBuilder.append("Size:").append(size).append(", [");
+        for (int i = 0; i < size; i++) {
+            if(i != 0){
+                stringBuilder.append(",");
+            }
+            stringBuilder.append(elements[i]);
+        }
+        stringBuilder.append("]");
+        return stringBuilder.toString();
+    }
 }
