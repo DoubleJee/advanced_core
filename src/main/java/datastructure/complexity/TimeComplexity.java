@@ -18,7 +18,7 @@ public class TimeComplexity {
 
         // 1 + 1 + 4 + 4 + 4 = 14次
 
-        //时间复杂度：O(1)，不管是n是几都是14次，可能1次
+        //时间复杂度：O(1)，不管n是几都是14次，可能1次，忽略常数
         //空间复杂度：O(1)，一个变量i
     }
 
@@ -29,7 +29,7 @@ public class TimeComplexity {
             System.out.println("test");
         }
 
-        //时间复杂度：O(n)，1常数和3常数都忽略，可能是N次
+        //时间复杂度：O(n)，1常数和3系数都忽略，可能是N次
         //空间复杂度：O(1)，一个变量i
     }
 
@@ -42,7 +42,9 @@ public class TimeComplexity {
             }
         }
 
-        //时间复杂度：O(n^2) //3n + 3n^2 + 1，可能是n的2次方次
+        //时间复杂度：O(n^2) //3n + 3n^2 + 1，可能是n的2次方次。  直接看for循环 n * n 2的n次方
+
+        //O(2^n)是每一层都是n的两倍，指数级增长。上面并不会
     }
 
 
@@ -57,6 +59,7 @@ public class TimeComplexity {
         }
 
         //时间复杂度：O(n)，可能是n次
+        //直接看for循环 n * 15，15个N，忽略15系数
     }
 
     public static void test5(int n) {
@@ -75,7 +78,7 @@ public class TimeComplexity {
             }
         }
 
-        //时间复杂度：O(nlogn) 可能是n*n的次方幂次数
+        //时间复杂度：O(nlogn) 可能是n（内层循环）*n的次方幂次数（外层循环）
     }
 
     public static void test08(int n) {
@@ -88,5 +91,15 @@ public class TimeComplexity {
         }
 
         //空间复杂度：O(n) 可能是n个int变量
+    }
+
+    public static void test09(int n,int k){
+        for (int i = 0; i < n; i++) {
+            System.out.println("test");
+        }
+        for (int i = 0; i < k; i++) {
+            System.out.println("test");
+        }
+        //时间复杂度：O(n+k)
     }
 }
