@@ -40,4 +40,13 @@ public class Car {
     protected void finalize() throws Throwable {
         System.out.println("Car -> finalize");
     }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (obj == null) {
+            return false;
+        }
+        Car car = (Car) obj;
+        return this.color.equals(car.color) && this.chimney == car.chimney;
+    }
 }

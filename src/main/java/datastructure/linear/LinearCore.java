@@ -1,6 +1,6 @@
 package datastructure.linear;
 
-public class Linear {
+public class LinearCore {
 
     /**
      * 线性结构
