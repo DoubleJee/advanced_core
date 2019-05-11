@@ -19,6 +19,7 @@ public class ArrayList<E> {
     private static int EXCEPTION_NOT_FIND = -1;
 
     public ArrayList(int capacity) {
+        //初始化数组
         if (capacity < DEFAULT_CAPACITY)
             capacity = DEFAULT_CAPACITY;
         elements = new Object[capacity];
@@ -26,22 +27,6 @@ public class ArrayList<E> {
 
     public ArrayList() {
         this(DEFAULT_CAPACITY);
-    }
-
-    private void indexException(int index) {
-        throw new IndexOutOfBoundsException("Index:" + index + ",Size:" + size);
-    }
-
-    private void checkIndex(int index) {
-        if (index < 0 || index >= size) {
-            indexException(index);
-        }
-    }
-
-    private void checkIndexForAdd(int index) {
-        if (index < 0 || index > size) {
-            indexException(index);
-        }
     }
 
     public int size() {
@@ -61,7 +46,10 @@ public class ArrayList<E> {
     }
 
     public void add(int index, E element) {
+        //检查下标是否有效
         checkIndexForAdd(index);
+        //检查容量是否充足，以及动态扩容
+        ensureCapacity(size + 1);
         for (int i = size; i > index; i--) {
             elements[i] = elements[i - 1];
         }
@@ -87,19 +75,30 @@ public class ArrayList<E> {
         for (int i = index + 1; i < size; i++) {
             elements[i - 1] = elements[i];
         }
-        size--;
+        //移除最后一位对象引用，否则前一位删除的话，将造成内存泄漏
+        elements[--size] = null;
         return old;
     }
 
     //时间复杂度 O(n)
     public int indexOf(E element) {
-        for (int i = 0; i < size; i++) {
-            if (element.equals(elements[i])) return i;
+        if (element == null) {
+            for (int i = 0; i < size; i++) {
+                if (elements[i] == null) return i;
+            }
+        } else {
+            for (int i = 0; i < size; i++) {
+                if (element.equals(elements[i])) return i;
+            }
         }
         return EXCEPTION_NOT_FIND;
     }
 
     public void clear() {
+        for (int i = 0; i < size; i++) {
+            //数组存储的对象，不被引用，将会被GC回收
+            elements[i] = null;
+        }
         size = 0;
     }
 
@@ -108,7 +107,7 @@ public class ArrayList<E> {
         StringBuilder stringBuilder = new StringBuilder();
         stringBuilder.append("Size:").append(size).append(", [");
         for (int i = 0; i < size; i++) {
-            if(i != 0){
+            if (i != 0) {
                 stringBuilder.append(",");
             }
             stringBuilder.append(elements[i]);
@@ -116,4 +115,36 @@ public class ArrayList<E> {
         stringBuilder.append("]");
         return stringBuilder.toString();
     }
+
+
+    private void ensureCapacity(int capacity) {
+        int oldCapacity = elements.length;
+        if (oldCapacity >= capacity) {
+            return;
+        }
+        int newCapacity = oldCapacity * 2;
+        Object[] newElements = new Object[newCapacity];
+        for (int i = 0; i < size; i++) {
+            newElements[i] = elements[i];
+        }
+        elements = newElements;
+//        System.out.println(oldCapacity + "扩容" + newCapacity);
+    }
+
+    private void indexException(int index) {
+        throw new IndexOutOfBoundsException("Index:" + index + ",Size:" + size);
+    }
+
+    private void checkIndex(int index) {
+        if (index < 0 || index >= size) {
+            indexException(index);
+        }
+    }
+
+    private void checkIndexForAdd(int index) {
+        if (index < 0 || index > size) {
+            indexException(index);
+        }
+    }
+
 }

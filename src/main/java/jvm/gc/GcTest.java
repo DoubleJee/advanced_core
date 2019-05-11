@@ -9,7 +9,7 @@ class Test{
     }
 }
 
-//GC垃圾回收机制：不定时的向堆内存清理不可达对象。不可达对象不一定会被马上收回
+//GC垃圾回收机制：不定时的向堆内存清理不可达对象。不可达对象不一定会被马上收回，没有被引用的对象，（没有一个变量存储对象的内存地址，没有被引用）
 public class GcTest {
 
     public static void main(String[] args) {
