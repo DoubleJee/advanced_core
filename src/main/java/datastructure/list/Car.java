@@ -1,4 +1,4 @@
-package datastructure.linear.array;
+package datastructure.list;
 
 public class Car {
     private int chimney;
@@ -43,7 +43,7 @@ public class Car {
 
     @Override
     public boolean equals(Object obj) {
-        if (obj == null) {
+        if (obj == null || !(obj instanceof Car)) {
             return false;
         }
         Car car = (Car) obj;

@@ -1,10 +1,9 @@
-package datastructure.linear.array;
+package datastructure.list.array;
 
-public class ArrayList<E> {
-    /**
-     * 大小
-     */
-    private int size;
+import datastructure.list.AbstractList;
+import datastructure.list.List;
+
+public class ArrayList<E> extends AbstractList<E> implements List<E> {
     /**
      * 元素
      */
@@ -13,10 +12,6 @@ public class ArrayList<E> {
      * 默认容量
      */
     private static int DEFAULT_CAPACITY = 10;
-    /**
-     * 异常下标
-     */
-    private static int EXCEPTION_NOT_FIND = -1;
 
     public ArrayList(int capacity) {
         //初始化数组
@@ -27,22 +22,6 @@ public class ArrayList<E> {
 
     public ArrayList() {
         this(DEFAULT_CAPACITY);
-    }
-
-    public int size() {
-        return size;
-    }
-
-    public boolean isEmpty() {
-        return size == 0;
-    }
-
-    public boolean contains(E element) {
-        return indexOf(element) != EXCEPTION_NOT_FIND;
-    }
-
-    public void add(E element) {
-        add(size, element);
     }
 
     public void add(int index, E element) {
@@ -129,22 +108,6 @@ public class ArrayList<E> {
         }
         elements = newElements;
 //        System.out.println(oldCapacity + "扩容" + newCapacity);
-    }
-
-    private void indexException(int index) {
-        throw new IndexOutOfBoundsException("Index:" + index + ",Size:" + size);
-    }
-
-    private void checkIndex(int index) {
-        if (index < 0 || index >= size) {
-            indexException(index);
-        }
-    }
-
-    private void checkIndexForAdd(int index) {
-        if (index < 0 || index > size) {
-            indexException(index);
-        }
     }
 
 }

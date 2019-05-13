@@ -1,10 +1,13 @@
-package datastructure.linear.array;
+package datastructure.list.array;
+
+import datastructure.list.Car;
+import datastructure.list.List;
 
 public class ArrayListTest {
 
 
     public static void main(String[] args) {
-        ArrayList<Integer> integerArrayList = new ArrayList<>();
+        List<Integer> integerArrayList = new ArrayList<>();
         integerArrayList.add(99);
         integerArrayList.add(88);
         integerArrayList.add(77);
@@ -13,7 +16,7 @@ public class ArrayListTest {
         for (int i = 0; i < 20; i++) {
             integerArrayList.add(i);
         }
-        ArrayList<Car> carList = new ArrayList<>();
+        List<Car> carList = new ArrayList<>();
         carList.add(new Car(2, "黄色"));
         carList.add(new Car(4, "红色"));
         carList.add(new Car(6, "银色"));
