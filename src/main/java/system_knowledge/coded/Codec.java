@@ -62,6 +62,22 @@ public class Codec {
         //编码，把ISO-8859-1字符串，使用ISO-8859-1编码格式，转换为原字节串 （与上面的字节串同值！！）
         byte[] clientACSIIStringBytes = clientASCIIString.getBytes("ISO-8859-1");
 
+        if (clientUTF8String.equals(clientASCIIString)){
+            System.out.println("string equals ok");
+        }
+
+        String cUSB = "";
+        for (byte b : clientUTF8StringBytes){
+            cUSB += b;
+        }
+        String cASB = "";
+        for (byte b : clientACSIIStringBytes){
+            cASB += b;
+        }
+
+        if (cUSB.equals(cASB)){
+            System.out.println("bytes equals ok");
+        }
 
 
         // 解码，服务器接收原字节串，使用UTF-8编码格式，转换为对应的字符串
