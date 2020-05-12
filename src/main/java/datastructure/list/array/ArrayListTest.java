@@ -30,5 +30,14 @@ public class ArrayListTest {
         System.out.println(integerArrayList);
         System.out.println(carList);
 
+        List<Integer> integerList = new ArrayList<>();
+        for (int i = 0; i < 50; i++) {
+            integerList.add(i);
+        }
+
+        for (int i = 0; i < 50; i++) {
+            integerList.remove(0);
+        }
+
     }
 }
