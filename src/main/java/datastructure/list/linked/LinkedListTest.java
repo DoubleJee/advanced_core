@@ -20,6 +20,8 @@ public class LinkedListTest {
         System.out.println(linkedList);
         linkedList.add(linkedList.size(), 10);
         System.out.println(linkedList);
+        linkedList.add(0, 100);
+        System.out.println(linkedList);
         System.gc();
 
     }

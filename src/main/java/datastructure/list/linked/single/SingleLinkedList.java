@@ -1,12 +1,11 @@
-package datastructure.list.linked;
+package datastructure.list.linked.single;
 
 import datastructure.list.AbstractList;
 import datastructure.list.List;
 
-public class LinkedList<E> extends AbstractList<E> implements List<E> {
+public class SingleLinkedList<E> extends AbstractList<E> implements List<E> {
 
     private Node<E> first;
-    private Node<E> last;
 
     /**
      * 复杂度：
@@ -16,29 +15,11 @@ public class LinkedList<E> extends AbstractList<E> implements List<E> {
      */
     @Override
     public void add(int index, E element) {
-        if (index == size){
-            // 向尾部添加元素
-            Node<E> oldLast = last;
-            last = new Node<>(oldLast, element, null);
-            // 第一次添加
-            if (oldLast == null){
-                first = last;
-            }else {
-                oldLast.next = last;
-            }
-        }else {
-            // 正常情况
-            Node<E> next = getNode(index);
-            Node<E> perv = next.prev;
-            Node<E> node = new Node<>(perv, element, next);
-            next.prev = node;
-
-            // index == 0
-            if (perv == null){
-                first = node;
-            }else {
-                perv.next = node;
-            }
+        if (index == 0) {
+            first = new Node<>(element, first);
+        } else {
+            Node<E> prev = getNode(index - 1);
+            prev.next = new Node<>(element, prev.next);
         }
         size++;
     }
@@ -77,25 +58,14 @@ public class LinkedList<E> extends AbstractList<E> implements List<E> {
     @Override
     public E remove(int index) {
         E oldElement = null;
-        Node<E> removeNode = getNode(index);
-        oldElement = removeNode.element;
-
-        if (index == 0){
-            // 删除头部
-            Node<E> oldFirst = first;
-            first = oldFirst.next;
-            first.prev = null;
-        }else {
-            Node<E> prev = removeNode.prev;
-            Node<E> next = removeNode.next;
-            prev.next = next;
-
-            // 删除尾部
-            if (next == null){
-                last = prev;
-            }else {
-                next.prev = prev;
-            }
+        if (index == 0) {
+            oldElement = first.element;
+            first = first.next;
+        } else {
+            Node<E> prev = getNode(index - 1);
+            Node<E> indexNode = prev.next;
+            prev.next = indexNode.next;
+            oldElement = indexNode.element;
         }
         size--;
         return oldElement;
@@ -127,27 +97,15 @@ public class LinkedList<E> extends AbstractList<E> implements List<E> {
         size = 0;
         //首节点为空的话，链表的元素全部会被回收
         first = null;
-        last = null;
     }
 
     private Node<E> getNode(int index) {
         checkIndex(index);
-        if (index < size / 2){
-            //正向寻找
-            Node<E> node = first;
-            for (int i = 0; i < index; i++) {
-                node = node.next;
-            }
-            return node;
-        }else {
-            //逆向寻找
-            Node<E> node = last;
-            for (int i = size - 1; i > index; i--) {
-                node = node.prev;
-            }
-            return node;
+        Node<E> node = first;
+        for (int i = 0; i < index; i++) {
+            node = node.next;
         }
-
+        return node;
     }
 
     @Override
@@ -172,11 +130,9 @@ public class LinkedList<E> extends AbstractList<E> implements List<E> {
 
     private class Node<E> {
         private E element;
-        private Node<E> prev;
         private Node<E> next;
 
-        public Node(Node<E> prev, E element, Node<E> next) {
-            this.prev = prev;
+        public Node(E element, Node<E> next) {
             this.element = element;
             this.next = next;
         }

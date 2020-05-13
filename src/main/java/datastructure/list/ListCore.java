@@ -34,5 +34,7 @@ public class ListCore {
      *
      * 扩容缩容时机，要保证避免复杂度震荡，扩容倍数和缩容时机相乘不等于1，可以避免复杂度震荡，也就是不要在临界区的地方新增删除，不然每次都会O(n)
      *
+     * @datastructure.list.linked.single.SingleLinkedList  @datastructure.list.array.ArrayList 在以上类有解释
+     *
      */
 }
