@@ -80,23 +80,23 @@ public class LinkedList<E> extends AbstractList<E> implements List<E> {
         Node<E> removeNode = getNode(index);
         oldElement = removeNode.element;
 
-        if (index == 0){
-            // 删除头部
-            Node<E> oldFirst = first;
-            first = oldFirst.next;
-            first.prev = null;
-        }else {
-            Node<E> prev = removeNode.prev;
-            Node<E> next = removeNode.next;
-            prev.next = next;
+        Node<E> prev = removeNode.prev;
+        Node<E> next = removeNode.next;
 
-            // 删除尾部
-            if (next == null){
-                last = prev;
-            }else {
-                next.prev = prev;
-            }
+        // 删除头部
+        if (prev == null){
+            first = next;
+        }else {
+            prev.next = next;
         }
+
+        // 删除尾部
+        if (next == null){
+            last = prev;
+        }else {
+            next.prev = prev;
+        }
+
         size--;
         return oldElement;
     }
@@ -163,7 +163,7 @@ public class LinkedList<E> extends AbstractList<E> implements List<E> {
             if (i != 0) {
                 stringBuilder.append(",");
             }
-            stringBuilder.append(node.element);
+            stringBuilder.append(node);
             node = node.next;
         }
         stringBuilder.append("]");
@@ -179,6 +179,26 @@ public class LinkedList<E> extends AbstractList<E> implements List<E> {
             this.prev = prev;
             this.element = element;
             this.next = next;
+        }
+
+        @Override
+        public String toString() {
+            StringBuilder sb = new StringBuilder();
+            if (prev != null){
+                sb.append(prev.element);
+            }else {
+                sb.append("null");
+            }
+
+            sb.append("_").append(element).append("_");
+
+            if (next != null){
+                sb.append(next.element);
+            }else {
+                sb.append("null");
+            }
+
+            return sb.toString();
         }
     }
 }

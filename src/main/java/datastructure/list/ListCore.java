@@ -36,5 +36,12 @@ public class ListCore {
      *
      * @datastructure.list.linked.single.SingleLinkedList  @datastructure.list.array.ArrayList 在以上类有解释
      *
+     * 双向链表比单向链表效率高一半。
+     *
+     * 如果频繁在尾部进行添加、删除操作，动态数组和双向链表均可选择
+     * 如果频繁在头部进行添加、删除操作，建议选择双向链表
+     * 如果有频繁的在任意位置进行添加、删除操作，建议选择双向链表
+     * 如果有频繁的查询操作（随机访问操作），建议选择动态数组
+     *
      */
 }

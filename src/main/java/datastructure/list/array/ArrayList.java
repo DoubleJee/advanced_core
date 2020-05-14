@@ -99,6 +99,12 @@ public class ArrayList<E> extends AbstractList<E> implements List<E> {
             elements[i] = null;
         }
         size = 0;
+
+        //缩容
+        if (elements == null && elements.length > DEFAULT_CAPACITY){
+            elements = new Object[DEFAULT_CAPACITY];
+        }
+
     }
 
     @Override
