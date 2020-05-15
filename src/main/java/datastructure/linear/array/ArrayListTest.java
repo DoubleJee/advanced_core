@@ -1,6 +1,6 @@
-package datastructure.list.array;
+package datastructure.linear.array;
 
-import datastructure.list.List;
+import datastructure.linear.List;
 
 public class ArrayListTest {
 

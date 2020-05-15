@@ -1,6 +1,6 @@
-package datastructure.list;
+package datastructure.linear;
 
-public class ListCore {
+public class LinearCore {
 
     /**
      * 线性结构
@@ -10,7 +10,8 @@ public class ListCore {
      *
      * 数组：一种顺序存储的线性表，所有元素的内存地址是连续的，致命缺点无法动态扩容。
      * 链表：一种链式存储的线性表，所有元素的内存地址不一定是连续的。（单向、双向、环形）
-     * 栈：一种特殊的线性表，只能在一断操作，LIFO后进先出
+     *   栈：一种特殊的线性表，只能在一端操作，LIFO后进先出。
+     * 队列：一种特殊的线性表，只能在头尾两端进行操作，FIFO先进先出。
      */
 
 
@@ -34,7 +35,7 @@ public class ListCore {
      *
      * 扩容缩容时机，要保证避免复杂度震荡，扩容倍数和缩容时机相乘不等于1，可以避免复杂度震荡，也就是不要在临界区的地方新增删除，不然每次都会O(n)
      *
-     * @datastructure.list.linked.single.SingleLinkedList  @datastructure.list.array.ArrayList 在以上类有解释
+     * @datastructure.linear.linked.single.SingleLinkedList  @datastructure.linear.array.ArrayList 在以上类有解释
      *
      * 双向链表比单向链表效率高一半。
      *

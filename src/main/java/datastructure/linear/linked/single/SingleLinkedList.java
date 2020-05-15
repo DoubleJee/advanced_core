@@ -1,7 +1,7 @@
-package datastructure.list.linked.single;
+package datastructure.linear.linked.single;
 
-import datastructure.list.AbstractList;
-import datastructure.list.List;
+import datastructure.linear.AbstractList;
+import datastructure.linear.List;
 
 public class SingleLinkedList<E> extends AbstractList<E> implements List<E> {
 

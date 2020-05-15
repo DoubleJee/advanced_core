@@ -1,7 +1,7 @@
-package datastructure.list.array;
+package datastructure.linear.array;
 
-import datastructure.list.AbstractList;
-import datastructure.list.List;
+import datastructure.linear.AbstractList;
+import datastructure.linear.List;
 
 public class ArrayList<E> extends AbstractList<E> implements List<E> {
     /**

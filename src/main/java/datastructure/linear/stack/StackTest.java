@@ -1,4 +1,4 @@
-package datastructure.list.stack;
+package datastructure.linear.stack;
 
 import datastructure.AssertTool;
 

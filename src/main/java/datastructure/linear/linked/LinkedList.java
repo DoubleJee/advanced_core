@@ -1,11 +1,13 @@
-package datastructure.list.linked;
+package datastructure.linear.linked;
 
-import datastructure.list.AbstractList;
-import datastructure.list.List;
+import datastructure.linear.AbstractList;
+import datastructure.linear.List;
 
 public class LinkedList<E> extends AbstractList<E> implements List<E> {
 
+    // 头节点
     private Node<E> first;
+    // 尾结点
     private Node<E> last;
 
     /**
@@ -125,7 +127,7 @@ public class LinkedList<E> extends AbstractList<E> implements List<E> {
     @Override
     public void clear() {
         size = 0;
-        //首节点为空的话，链表的元素全部会被回收
+        //首尾节点为空的话，链表的元素全部会被回收
         first = null;
         last = null;
     }
@@ -147,6 +149,7 @@ public class LinkedList<E> extends AbstractList<E> implements List<E> {
             }
             return node;
         }
+        // 效率提高一半
 
     }
 

@@ -1,6 +1,6 @@
-package datastructure.list.linked;
+package datastructure.linear.linked;
 
-import datastructure.list.List;
+import datastructure.linear.List;
 
 public class LinkedListTest {
     public static void main(String[] args) {

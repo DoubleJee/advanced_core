@@ -1,4 +1,4 @@
-package datastructure.list;
+package datastructure.linear;
 
 public abstract class AbstractList<E> implements List<E> {
     /**

@@ -1,4 +1,4 @@
-package datastructure.list.array;
+package datastructure.linear.array;
 
 public class Car {
     private int chimney;

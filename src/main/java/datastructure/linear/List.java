@@ -1,4 +1,4 @@
-package datastructure.list;
+package datastructure.linear;
 
 public interface List<E> {
 

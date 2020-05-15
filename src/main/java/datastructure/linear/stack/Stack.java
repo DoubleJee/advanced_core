@@ -1,7 +1,7 @@
-package datastructure.list.stack;
+package datastructure.linear.stack;
 
-import datastructure.list.List;
-import datastructure.list.array.ArrayList;
+import datastructure.linear.List;
+import datastructure.linear.array.ArrayList;
 
 public class Stack<E> {
 
