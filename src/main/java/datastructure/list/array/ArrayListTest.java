@@ -1,6 +1,5 @@
 package datastructure.list.array;
 
-import datastructure.list.Car;
 import datastructure.list.List;
 
 public class ArrayListTest {

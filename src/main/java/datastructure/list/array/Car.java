@@ -1,4 +1,4 @@
-package datastructure.list;
+package datastructure.list.array;
 
 public class Car {
     private int chimney;
