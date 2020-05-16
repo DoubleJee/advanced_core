@@ -143,6 +143,28 @@ public class BinarySearchTree<E extends Comparable> implements BinaryTreeInfo {
 
     }
 
+    public void levelOrder(Visitor<E> visitor) {
+        levelOrder(root,visitor);
+    }
+
+    public void levelOrder(Node<E> node,Visitor<E> visitor) {
+        if (node == null) return;
+        Queue<Node<E>> queue = new Queue<>();
+        queue.enQueue(node);
+        while (!queue.isEmpty()) {
+            node = queue.deQueue();
+            visitor.visit(node.element);
+            if (node.left != null) {
+                queue.enQueue(node.left);
+            }
+            if (node.right != null) {
+                queue.enQueue(node.right);
+            }
+
+        }
+
+    }
+
     public int compare(E e1, E e2) {
         if (comparator != null) {
             return comparator.compare(e1, e2);
@@ -174,6 +196,10 @@ public class BinarySearchTree<E extends Comparable> implements BinaryTreeInfo {
     @Override
     public Object string(Object node) {
         return ((Node<E>) node).element;
+    }
+
+    public interface Visitor<E>{
+        void visit(E element);
     }
 
     public static class Node<E> {

@@ -46,7 +46,14 @@ public class BinarySearchTreeTest {
         binarySearchTree.postorderTraversal();
         System.out.println("层序---------------------------");
         binarySearchTree.levelOrderTraversal();
-
+        System.out.println("自由接口层序---------------------------");
+        binarySearchTree.levelOrder(new BinarySearchTree.Visitor<Person>() {
+            @Override
+            public void visit(Person element) {
+                System.out.print(element.getAge() + "_");
+            }
+        });
+        System.out.println();
 
         BinarySearchTree<Integer> integerBinarySearchTree = new BinarySearchTree<>();
 
