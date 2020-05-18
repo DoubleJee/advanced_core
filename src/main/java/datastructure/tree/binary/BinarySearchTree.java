@@ -5,6 +5,7 @@ import datastructure.tree.printer.BinaryTreeInfo;
 
 import java.util.Comparator;
 
+// 二叉搜索树
 public class BinarySearchTree<E extends Comparable> implements BinaryTreeInfo {
 
     private int size;
@@ -186,6 +187,61 @@ public class BinarySearchTree<E extends Comparable> implements BinaryTreeInfo {
     }
 
 
+    // 寻找前驱节点
+    public Node<E> predecessor(Node<E> node){
+        if (node == null) return null;
+
+        // 前驱
+        Node<E> pre = node.left;
+
+        // 前驱节点在左子树当中 （left.right.right.right......)
+        if (pre != null){
+            while (pre.right != null){
+                pre = pre.right;
+            }
+            return pre;
+        }
+
+
+        // 前驱节点在其父、祖父中 (parent.parent.parent....... && parent.right = node)
+        while (node.parent != null && node.parent.right != node){
+            node = node.parent;
+        }
+
+        return node.parent;
+    }
+
+    // 寻找后驱节点
+    public Node<E> successor(Node<E> node){
+
+        if (node == null) return null;
+
+        // 后驱
+        Node<E> post = node.right;
+
+        // 后驱节点在右子树当中 （right.left.left.left......)
+        if (post != null){
+            while (post.left != null){
+                post = post.left;
+            }
+            return post;
+        }
+
+
+        // 后驱节点在其父、祖父中 (parent.parent.parent....... && parent.left = node)
+        while (node.parent != null && node.parent.left != node){
+            node = node.parent;
+        }
+
+        return node.parent;
+
+    }
+
+    public Node<E> getRoot(){
+        return root;
+    }
+
+
     // 是否是完全二叉树
     public boolean isComplete(){
         if (root == null) return false;
@@ -253,8 +309,8 @@ public class BinarySearchTree<E extends Comparable> implements BinaryTreeInfo {
         return recursionHeight(root);
     }
 
-    // 当前节点的高度等于其子节点的高度 + 1
     private int recursionHeight(Node<E> node){
+        // 当前节点的高度等于其子节点的高度 + 1
         if (node == null) return 0;
         // 递归找到最高子节点的高度 然后 + 1
         return 1 + Math.max(recursionHeight(node.left),recursionHeight(node.right));
@@ -267,7 +323,7 @@ public class BinarySearchTree<E extends Comparable> implements BinaryTreeInfo {
         return toString(root,sb,"");
     }
 
-    // 前序遍历输出
+    // 使用前序遍历打印 二叉搜索树
     private String toString(Node<E> node,StringBuilder sb,String prefix){
         if (node == null) return sb.toString();
         sb.append(prefix).append(node.element).append("\n");

@@ -100,8 +100,10 @@ public class BinarySearchTreeTest {
         integerBinarySearchTree.levelOrderTraversal(new SimpleVisitor());
 
         System.out.println(integerBinarySearchTree);
-        System.out.println(integerBinarySearchTree.height());
-        System.out.println(integerBinarySearchTree.recursionHeight());
+        System.out.println("高度：" + integerBinarySearchTree.height());
+        System.out.println("高度：" + integerBinarySearchTree.recursionHeight());
+        System.out.println("根节点前驱" + integerBinarySearchTree.predecessor(integerBinarySearchTree.getRoot()).element);
+        System.out.println("根节点后驱" + integerBinarySearchTree.successor(integerBinarySearchTree.getRoot()).element);
 
 
         BinarySearchTree<Integer> complete = new BinarySearchTree<>();
