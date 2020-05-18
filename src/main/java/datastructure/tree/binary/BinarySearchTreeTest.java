@@ -51,6 +51,10 @@ public class BinarySearchTreeTest {
         binarySearchTree.add(new Person(18));
         binarySearchTree.add(new Person(35));
 
+        System.out.println(binarySearchTree);
+        System.out.println(binarySearchTree.height());
+        System.out.println(binarySearchTree.recursionHeight());
+
         BinaryTrees.println(binarySearchTree);
         System.out.println("前序---------------------------");
         binarySearchTree.preorderTraversal(new SimpleVisitor());
@@ -95,7 +99,21 @@ public class BinarySearchTreeTest {
         System.out.println("层序---------------------------");
         integerBinarySearchTree.levelOrderTraversal(new SimpleVisitor());
 
+        System.out.println(integerBinarySearchTree);
+        System.out.println(integerBinarySearchTree.height());
+        System.out.println(integerBinarySearchTree.recursionHeight());
 
+
+        BinarySearchTree<Integer> complete = new BinarySearchTree<>();
+        complete.add(7);
+        complete.add(4);
+        complete.add(9);
+        complete.add(2);
+        complete.add(5);
+        complete.add(8);
+//        complete.add(1);
+        BinaryTrees.println(complete);
+        System.out.println(complete.isComplete());
 
     }
 }
