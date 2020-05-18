@@ -25,6 +25,20 @@ public class BinarySearchTreeTest {
         }
     }
 
+    static class SimpleVisitor implements BinarySearchTree.Visitor {
+
+        private boolean stop;
+
+        @Override
+        public boolean stop() {
+            return stop;
+        }
+
+        @Override
+        public void visit(Object element) {
+            System.out.println(element);
+        }
+    }
 
     public static void main(String[] args) {
 
@@ -39,18 +53,28 @@ public class BinarySearchTreeTest {
 
         BinaryTrees.println(binarySearchTree);
         System.out.println("前序---------------------------");
-        binarySearchTree.preorderTraversal();
+        binarySearchTree.preorderTraversal(new SimpleVisitor());
         System.out.println("中序---------------------------");
-        binarySearchTree.inorderTraversal();
+        binarySearchTree.inorderTraversal(new SimpleVisitor());
         System.out.println("后序---------------------------");
-        binarySearchTree.postorderTraversal();
+        binarySearchTree.postorderTraversal(new SimpleVisitor());
         System.out.println("层序---------------------------");
-        binarySearchTree.levelOrderTraversal();
+        binarySearchTree.levelOrderTraversal(new SimpleVisitor());
         System.out.println("自由接口层序---------------------------");
-        binarySearchTree.levelOrder(new BinarySearchTree.Visitor<Person>() {
+        binarySearchTree.levelOrderTraversal(new BinarySearchTree.Visitor<Person>() {
+            private int size = 0;
+            private boolean stop;
+            @Override
+            public boolean stop() {
+                return stop;
+            }
             @Override
             public void visit(Person element) {
-                System.out.print(element.getAge() + "_");
+                if (size < 2){
+                    System.out.print(element.getAge() + "_");
+                    size++;
+                }
+                stop = true;
             }
         });
         System.out.println();
@@ -63,13 +87,13 @@ public class BinarySearchTreeTest {
 
         BinaryTrees.println(integerBinarySearchTree);
         System.out.println("前序---------------------------");
-        integerBinarySearchTree.preorderTraversal();
+        integerBinarySearchTree.preorderTraversal(new SimpleVisitor());
         System.out.println("中序---------------------------");
-        integerBinarySearchTree.inorderTraversal();
+        integerBinarySearchTree.inorderTraversal(new SimpleVisitor());
         System.out.println("后序---------------------------");
-        integerBinarySearchTree.postorderTraversal();
+        integerBinarySearchTree.postorderTraversal(new SimpleVisitor());
         System.out.println("层序---------------------------");
-        integerBinarySearchTree.levelOrderTraversal();
+        integerBinarySearchTree.levelOrderTraversal(new SimpleVisitor());
 
 
 

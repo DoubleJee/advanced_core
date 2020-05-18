@@ -83,76 +83,60 @@ public class BinarySearchTree<E extends Comparable> implements BinaryTreeInfo {
     }
 
 
-    public void preorderTraversal() {
-        preorderTraversal(root);
+    public void preorderTraversal(Visitor<E> visitor) {
+        if (visitor == null) return;
+        preorderTraversal(root, visitor);
     }
 
     // 前序遍历 根节点 -> 前序遍历左子树 -> 前序遍历右子树
-    private void preorderTraversal(Node<E> node) {
-        if (node == null) return;
-        System.out.println(node.element);
-        preorderTraversal(node.left);
-        preorderTraversal(node.right);
+    private void preorderTraversal(Node<E> node, Visitor<E> visitor) {
+        if (node == null || visitor.stop()) return;
+        visitor.visit(node.element);
+        preorderTraversal(node.left, visitor);
+        preorderTraversal(node.right,visitor);
     }
 
-    public void inorderTraversal() {
-        inorderTraversal(root);
+    public void inorderTraversal(Visitor<E> visitor) {
+        if (visitor == null) return;
+        inorderTraversal(root,visitor);
     }
 
     // 中序遍历 中序遍历左子树 -> 根节点 -> 中序遍历右子树
-    private void inorderTraversal(Node<E> node) {
-        if (node == null) return;
-        inorderTraversal(node.left);
-        System.out.println(node.element);
-        inorderTraversal(node.right);
+    private void inorderTraversal(Node<E> node, Visitor<E> visitor) {
+        if (node == null || visitor.stop()) return;
+        inorderTraversal(node.left,visitor);
+        if (visitor.stop()) return;
+        visitor.visit(node.element);
+        inorderTraversal(node.right,visitor);
     }
 
-    public void postorderTraversal() {
-        postorderTraversal(root);
+    public void postorderTraversal(Visitor<E> visitor) {
+        postorderTraversal(root,visitor);
     }
 
     // 后序遍历 后序遍历左子树 -> 后序遍历右子树 -> 根节点
-    private void postorderTraversal(Node<E> node) {
-        if (node == null) return;
-        postorderTraversal(node.left);
-        postorderTraversal(node.right);
-        System.out.println(node.element);
+    private void postorderTraversal(Node<E> node, Visitor<E> visitor) {
+        if (node == null || visitor.stop()) return;
+        postorderTraversal(node.left,visitor);
+        postorderTraversal(node.right,visitor);
+        if (visitor.stop()) return;
+        visitor.visit(node.element);
     }
 
 
     // 中序遍历 从上往下、从左往右依次访问每一个节点
-    public void levelOrderTraversal() {
-        levelOrderTraversal(root);
+    public void levelOrderTraversal(Visitor<E> visitor) {
+        if (visitor == null) return;
+        levelOrderTraversal(root, visitor);
     }
 
-    public void levelOrderTraversal(Node<E> node) {
+    public void levelOrderTraversal(Node<E> node, Visitor<E> visitor) {
         if (node == null) return;
         Queue<Node<E>> queue = new Queue<>();
         queue.enQueue(node);
         while (!queue.isEmpty()) {
             node = queue.deQueue();
-            System.out.println(node.element);
-            if (node.left != null) {
-                queue.enQueue(node.left);
-            }
-            if (node.right != null) {
-                queue.enQueue(node.right);
-            }
-
-        }
-
-    }
-
-    public void levelOrder(Visitor<E> visitor) {
-        levelOrder(root,visitor);
-    }
-
-    public void levelOrder(Node<E> node,Visitor<E> visitor) {
-        if (node == null) return;
-        Queue<Node<E>> queue = new Queue<>();
-        queue.enQueue(node);
-        while (!queue.isEmpty()) {
-            node = queue.deQueue();
+            if (visitor.stop()) return;
             visitor.visit(node.element);
             if (node.left != null) {
                 queue.enQueue(node.left);
@@ -198,7 +182,9 @@ public class BinarySearchTree<E extends Comparable> implements BinaryTreeInfo {
         return ((Node<E>) node).element;
     }
 
-    public interface Visitor<E>{
+    public interface Visitor<E> {
+        boolean stop();
+
         void visit(E element);
     }
 
