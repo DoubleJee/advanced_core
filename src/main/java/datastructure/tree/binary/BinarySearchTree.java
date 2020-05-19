@@ -34,7 +34,8 @@ public class BinarySearchTree<E extends Comparable> implements BinaryTreeInfo {
     }
 
     public void clear() {
-
+        root = null;
+        size = 0;
     }
 
     public void add(E element) {
@@ -76,13 +77,76 @@ public class BinarySearchTree<E extends Comparable> implements BinaryTreeInfo {
     }
 
     public void remove(E element) {
-
+        remove(node(element));
     }
+
+    private void remove(Node<E> node){
+        if (node == null) return;
+        // 长度--
+        size --;
+
+        // 度为2的节点
+        if (node.hasTwoChild()){
+            // 找到前驱节点
+            Node<E> predecessor = predecessor(node);
+            // 用前驱节点的值覆盖，度为2节点的值
+            node.element = predecessor.element;
+            // 删除前驱节点
+            node = predecessor;
+        }
+
+        // 删除node节点
+
+        // 替代节点 是删除节点的子节点
+        Node<E> alternateNode = node.left != null ? node.left : node.right;
+
+        // 度为1的节点  将子节点（替代节点）的parent指向删除节点的父节点，将父节点的左或右子树指向（根据原本的指向关系来决定）删除节点的子节点（替代节点）
+        if (alternateNode != null) {
+            // 替代节点的父节点 指向 删除节点的父节点
+            alternateNode.parent = node.parent;
+
+            // 度为1 并且是根节点
+            if (node.parent == null) {
+                // 根节点直接指向删除节点的下级
+                root = alternateNode;
+            } else if (node.parent.left == node) {
+                node.parent.left = alternateNode;
+            } else {
+                node.parent.right = alternateNode;
+            }
+        }else if (node.parent == null){
+            // 叶子节点，并且是根节点，直接设置根节点为NULL
+            root = null;
+        }else {
+            // 叶子节点，并且不是根节点，将父节点指向删除节点的关系置为null
+            if (node.parent.left == node) {
+                node.parent.left = null;
+            } else {
+                node.parent.right = null;
+            }
+
+        }
+    }
+
 
     public boolean contains(E element) {
-        return false;
+        return node(element) != null;
     }
 
+    public Node<E> node(E element){
+        Node<E> node = root;
+        while (node != null){
+            int com = compare(element,node.element);
+            if (com == 0) {
+                return node;
+            }else if (com > 0) {
+                node = node.right;
+            }else{
+                node = node.left;
+            }
+        }
+        return null;
+    }
 
     public void preorderTraversal(Visitor<E> visitor) {
         if (visitor == null) return;
@@ -355,6 +419,11 @@ public class BinarySearchTree<E extends Comparable> implements BinaryTreeInfo {
         // 是否叶子节点
         public boolean isLeaf(){
             return left == null && right == null;
+        }
+
+        // 是否同时具有两个子树（子节点）
+        public boolean hasTwoChild(){
+            return left != null && right != null;
         }
     }
 }

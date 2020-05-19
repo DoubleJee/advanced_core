@@ -116,6 +116,12 @@ public class BinarySearchTreeTest {
 //        complete.add(1);
         BinaryTrees.println(complete);
         System.out.println(complete.isComplete());
+        complete.remove(7);
+        complete.remove(4);
+        System.out.println(complete.contains(7));
+        System.out.println(complete.contains(8));
+        BinaryTrees.println(complete);
+
 
     }
 }
