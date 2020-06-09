@@ -96,5 +96,15 @@ public interface BinaryTree<E extends Comparable> extends BinaryTreeInfo {
         public boolean hasTwoChild(){
             return left != null && right != null;
         }
+
+        // 是否是父节点的左子节点
+        public boolean isLeftChildOfParent(){
+            return parent != null && parent.left == this;
+        }
+
+        // 是否是父节点的右子节点
+        public boolean isRightChildOfParent(){
+            return parent != null && parent.right == this;
+        }
     }
 }

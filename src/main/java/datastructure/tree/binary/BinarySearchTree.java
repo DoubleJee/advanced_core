@@ -23,8 +23,9 @@ public class BinarySearchTree<E extends Comparable> extends AbstractBinaryTree<E
         elementNotNullCheck(element);
         // 添加的第一个节点
         if (root == null) {
-            root = new Node<>(element, null);
+            root = createNode(element,null);
             size++;
+            afterAdd(root);
             return;
         }
         // 添加的不是第一个节点
@@ -49,12 +50,14 @@ public class BinarySearchTree<E extends Comparable> extends AbstractBinaryTree<E
             }
         }
 
-        Node<E> newNode = new Node<>(element, parent);
+        Node<E> newNode = createNode(element,parent);
         if (cmp > 0) {
             parent.right = newNode;
         } else {
             parent.left = newNode;
         }
+
+        afterAdd(newNode);
     }
 
     @Override
@@ -146,6 +149,14 @@ public class BinarySearchTree<E extends Comparable> extends AbstractBinaryTree<E
         return root;
     }
 
+    // 模板方法 增加之后附加的动作
+    protected void afterAdd(Node<E> node){
+
+    }
+    // 工厂方法 创建节点
+    protected Node<E> createNode(E element,Node<E> parent){
+        return new Node<>(element, parent);
+    }
 
     @Override
     public String toString() {
