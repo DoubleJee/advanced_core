@@ -5,6 +5,7 @@ import java.util.Comparator;
 
 // 二叉搜索树
 public class BinarySearchTree<E extends Comparable> extends AbstractBinaryTree<E> {
+    // E extends Comparable是自定义的，一般可以不需要指定泛型E必须继承Comparable
 
     // 比较器
     private Comparator<E> comparator;
