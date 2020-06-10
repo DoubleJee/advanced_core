@@ -49,6 +49,7 @@ public class AVLTree<E extends Comparable> extends BinarySearchTree<E> {
         AVLNode<E> ubNode = (AVLNode<E>) node;
         // 寻找失衡节点的最高子树 用来判断属于哪种旋转情况 LL RR LR RL
         AVLNode<E> first = ubNode.tallerChild();
+        // 寻找失衡节点的最高子树的最高子树
         AVLNode<E> second = first.tallerChild();
 
         // L
@@ -83,49 +84,16 @@ public class AVLTree<E extends Comparable> extends BinarySearchTree<E> {
 
     // 左旋 r.right = rr.left; rr.left = r
     private void rotateLeft(AVLNode<E> node){
-        AVLNode<E> right = (AVLNode<E>)node.right;
+        // 旋转节点的替代子树
+        AVLNode<E> rrsNode = (AVLNode<E>)node.right;
+        // 旋转过程的交换子树
+        AVLNode<E> resNode = (AVLNode<E>)rrsNode.left;
         // r.right = rr.left
-        node.right = right.left;
+        node.right = resNode;
         // rr.left = r
-        right.left = node;
-
-        // 更新r的右子树的parent
-        if (node.right != null){
-            node.right.parent = node;
-        }
-        // 更新rr的父节点
-        right.parent = node.parent;
-        // 如果rr的父节点为空 则rr是树的根节点
-        if (right.parent == null){
-            root = right;
-        }else {
-            // 更新rr父节点的（左/右） 子树
-            if (node.isLeftChildOfParent()){
-                right.parent.left = right;
-            }else {
-                right.parent.right = right;
-            }
-        }
-
-        /**
-         *          更新rr父节点的（左/右） 子树 与 Root判断，可以改进为下例
-         *
-         *            if (node.isLeftChildOfParent()){
-         *                 right.parent.left = right;
-         *             }else if(node.isRightChildOfParent()){
-         *                 right.parent.right = right;
-         *             }else{
-         *                 root = right
-         *             }
-         *
-         */
-
-        // 更新r的父节点
-        node.parent = right;
-
-        // 更新r和rr的高度
-        node.updateHeight();
-        right.updateHeight();
+        rrsNode.left = node;
+        // 交换之后的操作（维护变化节点的parent和高度）
+        afterRotate(node,rrsNode,resNode);
     }
 
     // 右旋 r.left = rl.right; rl.right = r
@@ -160,6 +128,37 @@ public class AVLTree<E extends Comparable> extends BinarySearchTree<E> {
         // 更新r和rl的高度
         node.updateHeight();
         left.updateHeight();
+    }
+
+    /**
+     *  下列公式说明：r = 旋转节点，rrs = 旋转节点的替代子树（是rl，rr的其中一个），res = 旋转过程的交换子树（是rrs左子树、右子树的其中一个）
+     */
+
+    private void afterRotate(AVLNode<E> rNode,AVLNode<E> rrsNode,AVLNode<E> resNode){
+
+        // 更新rrs的父节点
+        rrsNode.parent = rNode.parent;
+
+        // 更新rrs父节点的（左/右）子树，如果rrs的父节点为空 则rrs是树的根节点
+        if (rNode.isLeftChildOfParent()){
+            rrsNode.parent.left = rrsNode;
+        }else if (rNode.isRightChildOfParent()){
+            rrsNode.parent.right = rrsNode;
+        }else {
+            root = rrsNode;
+        }
+
+        // 更新r的父节点
+        rNode.parent = resNode;
+
+        // 更新res的parent
+        if (resNode != null){
+            resNode.parent = rNode;
+        }
+
+        // 更新r和rrs的高度
+        updateHeight(rNode);
+        updateHeight(rrsNode);
     }
 
     class AVLNode<E> extends Node<E>{
