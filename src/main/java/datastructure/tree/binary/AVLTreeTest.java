@@ -36,5 +36,19 @@ public class AVLTreeTest {
 //        avlTree.add(new Person(1));
 
         BinaryTrees.println(avlTree);
+
+        /**
+         * 38, 93, 48, 42, 2, 51, 83, 67, 78, 3, 69, 95, 63, 25, 85, 43, 30
+         */
+
+        AVLTree<Integer> integerAVLTree = new AVLTree<>();
+        Integer[] integerArrays = new Integer[]{
+                38, 93, 48, 42, 2, 51, 83, 67, 78, 3, 69, 95, 63, 25, 85, 43, 30
+        };
+        for (Integer integer : integerArrays){
+            integerAVLTree.add(integer);
+        }
+
+        BinaryTrees.println(integerAVLTree);
     }
 }

@@ -78,6 +78,39 @@ public class AVLTree<E extends Comparable> extends BinarySearchTree<E> {
     }
 
 
+    // 恢复平衡 统一选择操作 把旋转涉及的节点抽象出来(a,b,c,d,e,f,g)来实现统一旋转 适合实际发布代码
+    private void reBalance2(Node<E> node){
+        // 失衡节点
+        AVLNode<E> ubNode = (AVLNode<E>) node;
+        // 寻找失衡节点的最高子树 用来判断属于哪种旋转情况 LL RR LR RL
+        AVLNode<E> first = ubNode.tallerChild();
+        // 寻找失衡节点的最高子树的最高子树
+        AVLNode<E> second = first.tallerChild();
+
+        // L
+        if (first.isLeftChildOfParent()){
+            // LL
+            if (second.isLeftChildOfParent()){
+                rotate(ubNode,(AVLNode<E>) second.left,second,(AVLNode<E>) second.right,first,(AVLNode<E>) first.right,ubNode,(AVLNode<E>) ubNode.right);
+            }else {
+                // LR
+                rotate(ubNode,(AVLNode<E>) first.left,first,(AVLNode<E>) second.left,second,(AVLNode<E>) second.right,ubNode,(AVLNode<E>) ubNode.right);
+            }
+        }else {
+            // R
+            // RL
+            if (second.isLeftChildOfParent()){
+                rotate(ubNode,(AVLNode<E>) ubNode.left,ubNode,(AVLNode<E>) second.left,second,(AVLNode<E>) second.right,first,(AVLNode<E>) first.right);
+            }else {
+                // RR
+                rotate(ubNode,(AVLNode<E>) ubNode.left,ubNode,(AVLNode<E>) first.left,first,(AVLNode<E>) second.left,second,(AVLNode<E>) second.right);
+            }
+        }
+
+
+    }
+
+
     /**
      * 下列公式说明：r = 旋转节点，rl = 旋转节点的左子树，rr = 旋转节点的右子树
      */
@@ -149,7 +182,7 @@ public class AVLTree<E extends Comparable> extends BinarySearchTree<E> {
         }
 
         // 更新r的父节点
-        rNode.parent = resNode;
+        rNode.parent = rrsNode;
 
         // 更新res的parent
         if (resNode != null){
@@ -159,6 +192,41 @@ public class AVLTree<E extends Comparable> extends BinarySearchTree<E> {
         // 更新r和rrs的高度
         updateHeight(rNode);
         updateHeight(rrsNode);
+    }
+
+    /**
+     *  统一旋转（把平衡节点的群组关系抽象出来 a,b,c,d,e,f,g）
+     */
+    private void rotate(AVLNode<E> r,
+                        AVLNode<E> a, AVLNode<E> b, AVLNode<E> c,
+                        AVLNode<E> d,
+                        AVLNode<E> e, AVLNode<E> f, AVLNode<E> g){
+
+        d.left = b;
+        d.right = f;
+        d.parent = r.parent;
+        if (r.isLeftChildOfParent()){
+            r.parent.left = d;
+        }else if (r.isRightChildOfParent()){
+            r.parent.right = d;
+        }else {
+            root = d;
+        }
+        b.parent = d;
+        f.parent = d;
+
+        b.left = a;
+        b.right = c;
+        if (a != null) a.parent = b;
+        if (c != null) c.parent = b;
+
+        f.left = e;
+        f.right = g;
+        if (e != null) e.parent = f;
+        if (g != null) g.parent = f;
+        updateHeight(b);
+        updateHeight(f);
+        updateHeight(d);
     }
 
     class AVLNode<E> extends Node<E>{
