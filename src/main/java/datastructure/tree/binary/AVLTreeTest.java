@@ -48,7 +48,12 @@ public class AVLTreeTest {
         for (Integer integer : integerArrays){
             integerAVLTree.add(integer);
         }
-
         BinaryTrees.println(integerAVLTree);
+
+
+        for (Integer integer : integerArrays){
+            integerAVLTree.remove(integer);
+            BinaryTrees.println(integerAVLTree);
+        }
     }
 }

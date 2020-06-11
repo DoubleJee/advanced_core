@@ -111,6 +111,8 @@ public class BinarySearchTree<E extends Comparable> extends AbstractBinaryTree<E
             }
 
         }
+
+        afterRemove(node);
     }
 
     @Override
@@ -151,6 +153,10 @@ public class BinarySearchTree<E extends Comparable> extends AbstractBinaryTree<E
 
     // 模板方法 增加之后附加的动作
     protected void afterAdd(Node<E> node){
+
+    }
+    // 模板方法 删除之后附加的动作
+    protected void afterRemove(Node<E> node){
 
     }
     // 工厂方法 创建节点
