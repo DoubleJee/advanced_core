@@ -78,7 +78,7 @@ public class AVLTree<E extends Comparable> extends BinarySearchTree<E> {
     }
 
 
-    // 恢复平衡 统一选择操作 把旋转涉及的节点抽象出来(a,b,c,d,e,f,g)来实现统一旋转 适合实际发布代码
+    // 恢复平衡 统一选择操作 把旋转涉及的节点抽象出来(a,b,c,d,e,f,g)(并且是从小到大，abc d efg ，分别是三个子树：abc子树，efg子树，bdf子树 )来实现统一旋转 适合实际发布代码
     private void reBalance2(Node<E> node){
         // 失衡节点
         AVLNode<E> ubNode = (AVLNode<E>) node;
@@ -196,12 +196,14 @@ public class AVLTree<E extends Comparable> extends BinarySearchTree<E> {
 
     /**
      *  统一旋转（把平衡节点的群组关系抽象出来 a,b,c,d,e,f,g）
+     *  (并且是从小到大，abc d efg ，分别是三个子树：abc子树，efg子树，bdf子树 )
      */
     private void rotate(AVLNode<E> r,
                         AVLNode<E> a, AVLNode<E> b, AVLNode<E> c,
                         AVLNode<E> d,
                         AVLNode<E> e, AVLNode<E> f, AVLNode<E> g){
 
+        // bdf子树
         d.left = b;
         d.right = f;
         d.parent = r.parent;
@@ -215,15 +217,19 @@ public class AVLTree<E extends Comparable> extends BinarySearchTree<E> {
         b.parent = d;
         f.parent = d;
 
+        // abc子树
         b.left = a;
         b.right = c;
         if (a != null) a.parent = b;
         if (c != null) c.parent = b;
 
+        // efg子树
         f.left = e;
         f.right = g;
         if (e != null) e.parent = f;
         if (g != null) g.parent = f;
+
+        // 更新各个子树根高度
         updateHeight(b);
         updateHeight(f);
         updateHeight(d);
