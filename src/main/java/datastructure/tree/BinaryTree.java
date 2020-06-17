@@ -106,5 +106,16 @@ public interface BinaryTree<E extends Comparable> extends BinaryTreeInfo {
         public boolean isRightChildOfParent(){
             return parent != null && parent.right == this;
         }
+
+        // 得到兄弟节点
+        public Node<E> sibling(){
+            if (isLeftChildOfParent()){
+                return parent.right;
+            }else if (isRightChildOfParent()){
+                return parent.left;
+            }else {
+                return null;
+            }
+        }
     }
 }
