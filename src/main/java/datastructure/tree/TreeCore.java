@@ -252,7 +252,7 @@ public class TreeCore {
      *
      *
      * 有8种情况：parent是RED节点，需要处理，不满足性质4
-     * f = 破坏规则的节点，（大部分是新添加的是红色）
+     * f = 破坏规则的节点，（大部分是新添加的红色节点）
      *
      * uncle节点是BLACK的4种情况 LL RR LR RL
      * LL RR：新添加破坏规则的节点是祖父节点的 Left - left 或者 Right - Right
@@ -265,8 +265,8 @@ public class TreeCore {
      *
      * uncle节点是RED的4种情况，会导致上溢
      * LL RR LR RL 上溢：新添加破坏规则的节点是祖父节点的 Left - left 或者 Right - Right 或者 Left - Right 或者 Right - Left，并且会导致合并上溢的
-     * 操作公式为 将parent、uncle染成BLACK，grand向上合并，也就是接着将grand新增递归执行修复，（也就是grand看成新添加的节点处理，染为红色，以此类推进行递归修复）
-     * grand向上合并时，可能继续发生上溢，以此类推递归，若持续到根节点，只需将根节点染成BLACK
+     * 操作公式为 将parent、uncle染成BLACK，grand向上合并，也就是grand看成新添加的节点处理，染为红色，再次进行添加的12种判断情况做出相应修复操作，以此类推递归进行
+     * grand向上合并时，可能继续发生上溢，以新添加节点的情况类推递归修复，若持续到根节点，只需将根节点染成BLACK
      *
      *
      *
