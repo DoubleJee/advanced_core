@@ -78,6 +78,7 @@ public class BinarySearchTreeTest {
                 if (size < 2){
                     System.out.print(element.getAge() + "_");
                     size++;
+                    return;
                 }
                 stop = true;
             }

@@ -3,7 +3,7 @@ package datastructure.tree.binary;
 import java.util.Comparator;
 
 // 红黑树 基础于二叉搜索树
-public class RBTree<E extends Comparable> extends BinarySearchTree<E>{
+public class RBTree<E extends Comparable> extends BalancedBinarySearchTree<E>{
 
     private static final boolean RED = false;
 
@@ -28,136 +28,84 @@ public class RBTree<E extends Comparable> extends BinarySearchTree<E>{
         return rbNode;
     }
 
-//    @Override
-//    protected void afterAdd(Node<E> node) {
-//        if (isBlack(node.parent)){
-//            return;
-//        }
-//
-//        if (isRed(node.parent.sibling())){
-//            loopRepair(node);
-//        }else {
-//            rotateRepair(node);
-//        }
-//    }
-//
-//
-//    private void loopRepair(Node<E> node){
-//        while (isRed(node) && isRed(node.parent.sibling())){
-//            black(node.parent);
-//            if (root != node.parent.parent){
-//                red(node.parent.parent);
-//            }
-//            black(node.parent.sibling());
-//            if (node.parent != null){
-//                node = node.parent.parent;
-//            }
-//        }
-//    }
-//
-//    private void rotateRepair(Node<E> node){
-//        if (node.isLeftChildOfParent()){
-//            // LL
-//            if (node.parent.isLeftChildOfParent()){
-//                rotate(node.parent.parent,node.left,node,node.right,node.parent,node.parent.right,node.parent.parent,node.parent.parent.right);
-//            } else {
-//                // RL
-//                rotate(node.parent.parent,node.parent.parent.left,node.parent.parent,node.left,node,node.right,node.parent,node.parent.right);
-//            }
-//        }else if (node.isRightChildOfParent()){
-//            // RR
-//            if (node.parent.isRightChildOfParent()) {
-//                rotate(node.parent.parent,node.parent.parent.left,node.parent.parent,node.parent.left,node.parent,node.left,node,node.right);
-//            }else {
-//                // LR
-//                rotate(node.parent.parent,node.parent.left,node.parent,node.left,node,node.right,node.parent.parent,node.parent.parent.right);
-//            }
-//        }
-//    }
-
     @Override
     protected void afterAdd(Node<E> node) {
-        // 如果添加节点的父节点是BLACK，则不处理
-        if (isBlack(node.parent)){
+
+        Node<E> parent = node.parent;
+
+        // 添加的是根节点 或者 上溢到根节点
+        if (parent == null){
+            black(node);
             return;
         }
 
-        // 父节点为RED，需要修复
-        while (isRed(node) && isRed(node.parent)){
-            // 修复
-            repair(node);
-            if (node.parent != null){
-                node = node.parent.parent;
+        // 如果添加节点的父节点是BLACK，则不处理
+        if (isBlack(parent)) return;
+
+        // 父节点为RED，需要维持红黑树的性质
+        Node<E> grand = parent.parent;
+        Node<E> uncle = parent.sibling();
+
+        // uncle节点为红色 操作公式：将parent、uncle染成BLACK，grand向上合并当成新添加的元素递归修复
+        if (isRed(uncle)){
+
+            black(parent);
+            red(grand);
+            black(uncle);
+
+            // 递归去修复
+            afterAdd(grand);
+            return;
+        }
+
+
+        // uncle节点为黑色 根据情况对应旋转一次即可
+        if (node.isLeftChildOfParent()){
+            // LL
+            if (parent.isLeftChildOfParent()){
+                rotate(grand,node.left,node,node.right,parent,parent.right,grand,grand.right);
+
+//                // parent染成BLACK，grand染成RED
+//                black(parent);
+//                red(grand);
+//                rotateRight(grand);
+            } else {
+                // RL
+                rotate(grand,grand.left,grand,node.left,node,node.right,parent,parent.right);
+
+//                // f染成BLACK，grand染成RED
+//                black(node);
+//                red(grand);
+//                rotateRight(parent);
+//                rotateLeft(grand);
+            }
+        }else if (node.isRightChildOfParent()){
+            // RR
+            if (parent.isRightChildOfParent()) {
+                rotate(grand,grand.left,grand,parent.left,parent,node.left,node,node.right);
+
+//                // parent染成BLACK，grand染成RED
+//                black(parent);
+//                red(grand);
+//                rotateLeft(grand);
+            }else {
+                // LR
+                rotate(grand,parent.left,parent,node.left,node,node.right,grand,grand.right);
+
+//                // f染成BLACK，grand染成RED
+//                black(node);
+//                red(grand);
+//                rotateLeft(parent);
+//                rotateRight(grand);
             }
         }
+
 
     }
 
-
-    // 修复
-    private void repair(Node<E> node){
-        // 如果uncle节点是红色，递归染色
-        if (isRed(node.parent.sibling())){
-
-            black(node.parent);
-            if (root != node.parent.parent){
-                red(node.parent.parent);
-            }
-            black(node.parent.sibling());
-
-        }else {
-            // 如果uncle节点是黑色，根据情况对应旋转一次即可
-            if (node.isLeftChildOfParent()){
-                // LL
-                if (node.parent.isLeftChildOfParent()){
-                    rotate(node.parent.parent,node.left,node,node.right,node.parent,node.parent.right,node.parent.parent,node.parent.parent.right);
-                } else {
-                    // RL
-                    rotate(node.parent.parent,node.parent.parent.left,node.parent.parent,node.left,node,node.right,node.parent,node.parent.right);
-                }
-            }else if (node.isRightChildOfParent()){
-                // RR
-                if (node.parent.isRightChildOfParent()) {
-                    rotate(node.parent.parent,node.parent.parent.left,node.parent.parent,node.parent.left,node.parent,node.left,node,node.right);
-                }else {
-                    // LR
-                    rotate(node.parent.parent,node.parent.left,node.parent,node.left,node,node.right,node.parent.parent,node.parent.parent.right);
-                }
-            }
-        }
-    }
-
-    private void rotate(Node<E> r,
-                        Node<E> a, Node<E> b, Node<E> c,
-                        Node<E> d,
-                        Node<E> e, Node<E> f, Node<E> g) {
-
-        // bdf子树
-        d.left = b;
-        d.right = f;
-        d.parent = r.parent;
-        if (r.isLeftChildOfParent()) {
-            r.parent.left = d;
-        } else if (r.isRightChildOfParent()) {
-            r.parent.right = d;
-        } else {
-            root = d;
-        }
-        b.parent = d;
-        f.parent = d;
-
-        // abc子树
-        b.left = a;
-        b.right = c;
-        if (a != null) a.parent = b;
-        if (c != null) c.parent = b;
-
-        // efg子树
-        f.left = e;
-        f.right = g;
-        if (e != null) e.parent = f;
-        if (g != null) g.parent = f;
-
+    @Override
+    protected void rotate(Node<E> r, Node<E> a, Node<E> b, Node<E> c, Node<E> d, Node<E> e, Node<E> f, Node<E> g) {
+        super.rotate(r, a, b, c, d, e, f, g);
         //染色
         black(d);
 
@@ -209,6 +157,11 @@ public class RBTree<E extends Comparable> extends BinarySearchTree<E>{
         private boolean color = RED;
         public RBNode(E element, Node<E> parent) {
             super(element, parent);
+        }
+
+        @Override
+        public String toString() {
+            return (color == RED ? "R" : "B") + "_" + super.toString();
         }
     }
 }

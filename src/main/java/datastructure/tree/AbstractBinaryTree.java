@@ -146,7 +146,7 @@ public abstract class AbstractBinaryTree<E extends Comparable> implements Binary
 
     @Override
     public Object string(Object node) {
-        return ((Node<E>) node).element;
+        return node;
     }
 
     // 获取节点

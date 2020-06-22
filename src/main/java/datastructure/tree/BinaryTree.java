@@ -117,5 +117,10 @@ public interface BinaryTree<E extends Comparable> extends BinaryTreeInfo {
                 return null;
             }
         }
+
+        @Override
+        public String toString() {
+            return element.toString();
+        }
     }
 }

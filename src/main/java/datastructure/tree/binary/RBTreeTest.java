@@ -8,7 +8,7 @@ public class RBTreeTest {
     public static void main(String[] args) {
         RBTree<Integer> integerRBTree = new RBTree<>();
         Integer[] integerArrays = new Integer[]{
-                84, 71, 7, 53, 60, 34, 87, 42, 70, 85, 75,88, 2, 18, 69, 17, 67, 55, 64, 82, 32, 27, 46, 84, 12, 9, 45, 62, 40, 46, 75, 33, 66, 96, 73, 82, 65, 5, 51, 17, 94, 35, 10, 2, 1, 77, 8, 11,
+                98, 89, 79, 83, 92, 90, 37, 55, 35, 33, 20,82, 45, 23, 47, 50, 68, 21, 71, 67, 81, 93, 56,98, 39, 72, 16, 40, 37, 2, 3, 69, 60, 13, 24, 46, 73, 44, 70, 25
         };
         for (Integer integer : integerArrays){
             integerRBTree.add(integer);

@@ -266,7 +266,7 @@ public class TreeCore {
      * uncle节点是RED的4种情况，会导致上溢
      * LL RR LR RL 上溢：新添加破坏规则的节点是祖父节点的 Left - left 或者 Right - Right 或者 Left - Right 或者 Right - Left，并且会导致合并上溢的
      * 操作公式为 将parent、uncle染成BLACK，grand向上合并，也就是grand看成新添加的节点处理，染为红色，再次进行添加的12种判断情况做出相应修复操作，以此类推递归进行
-     * grand向上合并时，可能继续发生上溢，以新添加节点的情况类推递归修复，若持续到根节点，只需将根节点染成BLACK
+     * grand向上合并时，可能继续发生上溢，以新添加节点的情况类推递归修复，若持续到根节点，需将根节点染成BLACK
      *
      *
      *
