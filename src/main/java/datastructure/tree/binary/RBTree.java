@@ -103,6 +103,104 @@ public class RBTree<E extends Comparable> extends BalancedBinarySearchTree<E>{
 
     }
 
+
+    @Override
+    protected void afterRemove(Node<E> node) {
+        // 删除节点为RED，不需要处理，没有破坏性质
+        if (isRed(node)) return;
+
+        // 删除节点为BLACK，可能需要处理，可能会破坏性质
+
+        // 度为1，可能需要处理，可能会破坏性质，如果用以替代的子节点是RED，将替代的子节点染为黑色
+        Node<E> replaceNode = node.left == null ? node.right : node.left;
+        if (isRed(replaceNode)){
+            black(replaceNode);
+            return;
+        }
+
+
+        // 删除BLACK叶子节点
+        Node<E> parent = node.parent;
+
+        // 为根节点 不需要处理，没有破坏性质
+        if (parent == null) return;
+
+
+        Node<E> sibling = node.parent.left != null ? node.parent.left : node.parent.right;
+        // 兄弟节点是BLACK
+        if (isBlack(sibling)){
+            // 兄弟节点，有一个RED子节点（借兄弟的子节点），根据parent - sibling - sibling的RED子节点进行旋转
+            // 旋转中心节点继承parent的颜色，旋转后的左右节点染成黑色
+            if (isRed(sibling.left)){
+                if (sibling.isLeftChildOfParent()){
+                    // LL
+                    rotateRight(parent);
+
+                    black(sibling.left);
+                    color(sibling,((RBNode<E>)parent).color);
+                    black(parent);
+
+
+                }else {
+                    // RL
+                    rotateRight(sibling);
+                    rotateLeft(parent);
+
+                    black(sibling);
+                    color(sibling.left,((RBNode<E>)parent).color);
+                    black(parent);
+                }
+            }else if (isRed(sibling.right)){
+                if (sibling.isLeftChildOfParent()){
+                    // LR
+                    rotateLeft(sibling);
+                    rotateRight(parent);
+
+                    black(sibling);
+                    color(sibling.right,((RBNode<E>)parent).color);
+                    black(parent);
+
+
+                }else {
+                    // RR
+                    rotateLeft(parent);
+
+                    black(sibling.right);
+                    color(sibling,((RBNode<E>)parent).color);
+                    black(parent);
+                }
+            }else {
+                // 兄弟节点，没有一个RED子节点（下溢，父节点向下合并），将sibling节点染成红色，parent节点染成黑色
+                red(sibling);
+                // 如果原本parent节点是BLACK，会导致再次上溢，将父节点当成删除的节点，继续修复
+                if (isBlack(parent)){
+                    afterRemove(parent);
+                    return;
+                }
+                black(parent);
+            }
+
+        }else {
+            // 兄弟节点是RED
+            // 对parent - sibling - 删除节点相对的sibling的远邻节点（就是真正要变为兄弟节点的它的另外一边的节点）进行相应情况的旋转，将sibling节点染成黑色，parent节点染成红色
+            // 经过旋转会得到正确的兄弟节点，sibling会成为整棵子树的新BLACK根节点，子节点指向之前的父节点（变为了RED），父节点带着正确的兄弟节点，指向自己
+            if (sibling.isLeftChildOfParent()){
+                // LL
+                rotateRight(parent);
+
+            }else {
+                // RR
+                rotateLeft(parent);
+            }
+
+            red(parent);
+            black(sibling);
+            // 得到了正确的BLACK 兄弟节点，继续修复
+            afterRemove(node);
+        }
+
+    }
+
     @Override
     protected void rotate(Node<E> r, Node<E> a, Node<E> b, Node<E> c, Node<E> d, Node<E> e, Node<E> f, Node<E> g) {
         super.rotate(r, a, b, c, d, e, f, g);

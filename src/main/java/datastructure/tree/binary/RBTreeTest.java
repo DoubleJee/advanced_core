@@ -2,6 +2,8 @@ package datastructure.tree.binary;
 
 import datastructure.tree.printer.BinaryTrees;
 
+import java.util.Scanner;
+
 public class RBTreeTest {
 
 
@@ -20,6 +22,16 @@ public class RBTreeTest {
 //            integerRBTree.remove(integer);
 //            BinaryTrees.println(integerRBTree);
 //        }
+        Scanner scanner = new Scanner(System.in);
+        while (true){
+            System.out.print("请输入删除的元素：");
+            int removeElement = scanner.nextInt();
+            if (removeElement == 8888) break;
+            integerRBTree.remove(removeElement);
+            BinaryTrees.println(integerRBTree);
+        }
+
+
     }
 
 }
