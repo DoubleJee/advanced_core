@@ -112,21 +112,24 @@ public class RBTree<E extends Comparable> extends BalancedBinarySearchTree<E>{
         // 删除节点为BLACK，可能需要处理，可能会破坏性质
 
         // 度为1，可能需要处理，可能会破坏性质，如果用以替代的子节点是RED，将替代的子节点染为黑色
-        Node<E> replaceNode = node.left == null ? node.right : node.left;
-        if (isRed(replaceNode)){
-            black(replaceNode);
-            return;
+        // if (!node.isRightChildOfParent() && !node.isLeftChildOfParent())  是为了兼顾到兄弟没有一个RED节点进行上溢，并且parent是black节点当成新删除节点递归调用修复的情况，不能将parent认为下面还有节点，应认为parent是叶子节点
+        if (!node.isRightChildOfParent() && !node.isLeftChildOfParent()){
+            Node<E> replaceNode = node.left == null ? node.right : node.left;
+            if (isRed(replaceNode)){
+                black(replaceNode);
+                return;
+            }
         }
 
 
-        // 删除BLACK叶子节点
+        // 删除BLACK叶子节点，会导致下溢
         Node<E> parent = node.parent;
 
         // 为根节点 不需要处理，没有破坏性质
         if (parent == null) return;
 
-
-        Node<E> sibling = node.parent.left != null ? node.parent.left : node.parent.right;
+        // node.isLeftChildOfParent() 是为了兼顾到兄弟没有一个RED节点进行上溢，并且parent是black节点当成新删除节点递归调用修复的情况（parent的父节点还在指向它，并没有真正删除，断线），帮助得到正确的兄弟节点
+        Node<E> sibling = node.isLeftChildOfParent() || node.parent.left == null ? node.parent.right : node.parent.left;
         // 兄弟节点是BLACK
         if (isBlack(sibling)){
             // 兄弟节点，有一个RED子节点（借兄弟的子节点），根据parent - sibling - sibling的RED子节点进行旋转
@@ -174,6 +177,7 @@ public class RBTree<E extends Comparable> extends BalancedBinarySearchTree<E>{
                 red(sibling);
                 // 如果原本parent节点是BLACK，会导致再次上溢，将父节点当成删除的节点，继续修复
                 if (isBlack(parent)){
+                    // 会有2处特殊情况处理，在方法有注释提到
                     afterRemove(parent);
                     return;
                 }
