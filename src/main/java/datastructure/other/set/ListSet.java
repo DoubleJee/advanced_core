@@ -1,4 +1,4 @@
-package datastructure.linear.set;
+package datastructure.other.set;
 
 import datastructure.linear.List;
 import datastructure.linear.linked.LinkedList;

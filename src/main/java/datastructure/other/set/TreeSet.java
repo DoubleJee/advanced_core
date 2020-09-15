@@ -1,4 +1,4 @@
-package datastructure.linear.set;
+package datastructure.other.set;
 
 import datastructure.tree.BinaryTree;
 import datastructure.tree.binary.RBTree;

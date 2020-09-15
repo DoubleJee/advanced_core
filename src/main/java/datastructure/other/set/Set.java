@@ -1,4 +1,4 @@
-package datastructure.linear.set;
+package datastructure.other.set;
 
 import datastructure.tree.BinaryTree;
 // 集合 存放的元素不重复
