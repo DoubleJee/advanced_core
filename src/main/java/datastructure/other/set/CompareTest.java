@@ -45,6 +45,13 @@ public class CompareTest {
             }
         });
 
+        TimeTool.checkTime("MapSet", new TimeTool.Task() {
+            @Override
+            public void execute() {
+                compare(list,new MapSet<>());
+            }
+        });
+
         // 红黑树集合性能优于链表集合
     }
 }
