@@ -3,6 +3,7 @@ package datastructure.other.map;
 import datastructure.tree.BinaryTree;
 import datastructure.tree.binary.RBTree;
 
+import java.util.Objects;
 import java.util.concurrent.atomic.AtomicBoolean;
 // Tree映射 红黑树实现
 public class TreeMap<K, V> implements Map<K, V> {
@@ -85,7 +86,7 @@ public class TreeMap<K, V> implements Map<K, V> {
 
             @Override
             public void visit(Node<K, V> element) {
-                if (element.value == null && value == null || element.value.equals(value)) {
+                if (Objects.equals(element.value,value)) {
                     result.set(true);
                     stop = true;
                 }
