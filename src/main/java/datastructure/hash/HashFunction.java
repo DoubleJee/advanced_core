@@ -1,10 +1,16 @@
 package datastructure.hash;
 
+
+import java.util.HashMap;
+import java.util.Map;
+
 public class HashFunction {
 
-    // 字符串：字符从头到尾计算 每个字符 + (前一个字符 * n)
-    // 例如 jack的hash值 = [(j * n + a) * n + c] * n + k
-    // n定义为31最佳
+    /**
+     * 字符串：字符从头到尾计算 每个字符 + (前一个字符 * n)
+     * 例如 jack的hash值 = [(j * n + a) * n + c] * n + k   =  j * n^3 + a * n^2 + c * n^1 + k * n^0
+     * n定义为31最佳
+     */
     public static int hashCode(String string){
         int size = string.length();
         int hashCode = 0;
@@ -61,9 +67,20 @@ public class HashFunction {
 
 
         System.out.println(">>>>>>>>>>>>>>>>>>>>>>>>>>>>");
-        System.out.println(-112133123 & 9);
+        // 取模优化
+        System.out.println(-112133123 & 15);
 
 
+        Person p1 = new Person(18,178.5,"gzz");
+        Person p2 = new Person(18,178.5,"gzz");
 
+        System.out.println(p1.hashCode());
+        System.out.println(p2.hashCode());
+        System.out.println(p1.equals(p2));
+
+        Map<Object,String> map = new HashMap<>();
+        map.put(p1,"gzz");
+        map.put(p2,"jack");
+        System.out.println(map);
     }
 }
