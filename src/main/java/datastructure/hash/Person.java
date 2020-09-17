@@ -41,7 +41,11 @@ public class Person {
     @Override
     public boolean equals(Object obj) {
         if (this == obj) return true;
-        if (obj == null || !(obj instanceof Person)) return false;
+        // 严格按照Class判断
+        if (obj == null || obj.getClass() != this.getClass()) return false;
+
+        // 下面这种如果是Person的子类 instanceof 也会通过
+//        if (obj == null || !(obj instanceof Person)) return false;
         Person p2 = (Person) obj;
         return age == p2.age && height == p2.height && Objects.equals(name, p2.name);
     }
