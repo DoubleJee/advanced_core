@@ -1,7 +1,7 @@
 package datastructure.hash.model;
 
 public class Key {
-    private int value;
+    protected int value;
 
     public Key(int value) {
         this.value = value;

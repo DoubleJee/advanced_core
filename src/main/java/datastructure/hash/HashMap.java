@@ -73,7 +73,7 @@ public class HashMap<K, V> implements Map<K, V> {
         do {
             parent = node;
             K k2 = node.key;
-            int h2 = k2.hashCode();
+            int h2 = node.hash;
 
             // hash值比较，用以确认桶内的红黑树寻找方向
             if (h1 > h2) {
