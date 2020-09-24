@@ -1,6 +1,8 @@
 package datastructure.hash;
 
 
+import datastructure.hash.model.Person;
+
 import java.util.HashMap;
 import java.util.Map;
 

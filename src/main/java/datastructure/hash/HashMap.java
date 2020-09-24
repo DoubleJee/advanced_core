@@ -1,7 +1,7 @@
 package datastructure.hash;
 
+import datastructure.linear.queue.Queue;
 import datastructure.other.map.Map;
-import datastructure.tree.BinaryTree;
 
 import java.util.Objects;
 
@@ -58,17 +58,70 @@ public class HashMap<K, V> implements Map<K, V> {
         }
 
         // 哈希冲突
-        // 添加新的节点到红黑树上面
+        // 添加新的节点添加到红黑树上面
         Node<K, V> parent = null;
         Node<K, V> node = root;
-        int cmp = 0;
-        // 要放入key的hash值
-        int h1 = key == null ? 0 : key.hashCode();
-        do {
+        int cmp;
 
+        // 新添加的key
+        K k1 = key;
+        // 新添加key的hash值
+        int h1 = key == null ? 0 : k1.hashCode();
+        Node<K, V> result = null;
+        // 完整扫描
+        boolean searched = false;
+        do {
             parent = node;
-            // 比较
-            cmp = compare(key, node.key, h1, node.hash);
+            K k2 = node.key;
+            int h2 = k2.hashCode();
+
+            // hash值比较，用以确认桶内的红黑树寻找方向
+            if (h1 > h2) {
+                cmp = 1;
+            } else if (h1 < h2) {
+                cmp = -1;
+
+                // 对象是否相等equals，确认是否已存在能替换
+            } else if (Objects.equals(k1, k2)) {
+                cmp = 0;
+
+                // 类型不同，根据类名确认桶内红黑树寻找方向
+            } else if (k1 != null && k2 != null && k1.getClass() != k2.getClass()) {
+                String k1ClsName = k1.getClass().getName();
+                String k2ClsName = k2.getClass().getName();
+                cmp = k1ClsName.compareTo(k2ClsName);
+
+                // 类型相同，具备可比较性，根据自带比较方法确认桶内红黑树寻找方向（比较得是不等于的情况，如果是等于则和equals冲突，等于当做是无法寻找方向的情况）
+            } else if (k1 != null && k2 != null
+                    && k1.getClass() == k2.getClass()
+                    && k1 instanceof Comparable
+                    && (cmp = ((Comparable) k1).compareTo(k2)) == 0) {
+
+                // 没有任何方式来确认桶内红黑树寻找方向了，也就是无法寻找方向，只能进行一次完整扫描，看看能不能找到节点equals情况
+            } else if (!searched) {
+
+                // 进行扫描，扫描到了就将结果保存，准备替换该节点值
+                if (node.right != null && (result = node(node.right, k1)) != null
+                        || node.left != null && (result = node(node.left, k1)) != null){
+                    node = result;
+                    cmp = 0;
+                }else {
+                    // 扫描不到，整个桶内的红黑树没有相等的节点，说明是新增，没有任何方式来确认插入方向，只能找个随机不唯一的方式来确认，那就是利用内存地址来比大小（在用内存地址这种方式前，会有一次完整扫描，不用担心插入重复），来决定插入的方向，内存地址没有负数所以不会溢出，不会出现异常
+                    cmp = System.identityHashCode(k1) - System.identityHashCode(k2);
+                }
+
+
+                // 进行了一次完整扫描了，将标志修改，不需要再次扫描整个红黑树
+                searched = true;
+
+
+                // 如上，进行过了完整扫描，并且也没有找到，此后的遇到的每个节点，都利用内存地址来比较，确认插入方向
+            } else {
+                cmp = System.identityHashCode(k1) - System.identityHashCode(k2);
+            }
+
+
+
             if (cmp > 0) {
                 node = node.right;
             } else if (cmp < 0) {
@@ -112,11 +165,36 @@ public class HashMap<K, V> implements Map<K, V> {
 
     @Override
     public boolean containsValue(V value) {
+        if (size == 0) return false;
+        Queue<Node<K, V>> queue = new Queue<>();
+        for (Node<K, V> root : table) {
+            if (root == null) continue;
+            queue.enQueue(root);
+            while (!queue.isEmpty()) {
+                Node<K, V> node = queue.deQueue();
+                if (Objects.equals(node.value, value)) return true;
+                if (node.left != null) queue.enQueue(node.left);
+                if (node.right != null) queue.enQueue(node.right);
+            }
+        }
         return false;
     }
 
     @Override
     public void traversal(Visitor<K, V> visitor) {
+        if (size == 0 || visitor == null) return;
+        Queue<Node<K, V>> queue = new Queue<>();
+        for (Node<K, V> root : table) {
+            if (root == null) continue;
+            queue.enQueue(root);
+            while (!queue.isEmpty()) {
+                if (visitor.stop()) return;
+                Node<K, V> node = queue.deQueue();
+                visitor.visit(node.key, node.value);
+                if (node.left != null) queue.enQueue(node.left);
+                if (node.right != null) queue.enQueue(node.right);
+            }
+        }
 
     }
 
@@ -132,7 +210,7 @@ public class HashMap<K, V> implements Map<K, V> {
     }
 
     // 用于已存在的红黑树节点得到 其所在的索引
-    private int index(Node<K,V> node) {
+    private int index(Node<K, V> node) {
         int hashCode = node.hash;
         hashCode = hashCode ^ (hashCode >>> 16);
         return hashCode & (table.length - 1);
@@ -149,7 +227,7 @@ public class HashMap<K, V> implements Map<K, V> {
 
         // hash值相等，两个key不相等equals，借助其他方式来比较
         // 判断类名
-        if (k1 != null && k2 != null){
+        if (k1 != null && k2 != null) {
             String k1Cls = k1.getClass().getName();
             String k2Cls = k2.getClass().getName();
             // 按照类名比较
@@ -157,7 +235,7 @@ public class HashMap<K, V> implements Map<K, V> {
             if (result != 0) return result;
 
             // 是同一种类型并且具备可比较性，交给他们自己比较
-            if (k1 instanceof Comparable){
+            if (k1 instanceof Comparable) {
                 return ((Comparable) k1).compareTo(k2);
             }
         }
@@ -165,30 +243,68 @@ public class HashMap<K, V> implements Map<K, V> {
         // hash值相等，同一种类型，不具备可比较性
         // k1为null，k2不为null || k1不为null，k2为null
 
-        // 上面这种情况，hash值相等，对象不相等equals，也不具备可比较性，只能使用内存地址来比较
+        // 上面这种情况，hash值相等，对象不相等equals，也不具备可比较性，只能使用内存地址来比较，看向左还是向右
+        // 内存地址比较有随机不确定性，会导致结果不稳定
         return System.identityHashCode(k1) - System.identityHashCode(k2);
     }
 
     // 寻找节点
-    private Node<K,V> node(K key){
-        // 根据索引找到节点
-        Node<K,V> node = table[index(key)];
-        int h1 = key == null ? 0 : key.hashCode();
-        int cmp;
-        while (node != null){
-            cmp = compare(key,node.key,h1,node.hash);
-            if (cmp == 0){
-                return node;
-            }else if (cmp < 0){
+    private Node<K, V> node(K key) {
+        // 根据索引找到根节点
+        Node<K, V> root = table[index(key)];
+        return node(root, key);
+    }
+
+    // 根据key寻找该节点与子树有没有，key相等的节点
+    private Node<K, V> node(Node<K, V> node, K k1) {
+        if (node == null) return null;
+        int h1 = k1 == null ? 0 : k1.hashCode();
+        Node<K, V> result = null;
+        int cmp = 0;
+        do {
+            int h2 = node.hash;
+            K k2 = node.key;
+            // hash值直接比较，用以确认桶内的红黑树寻找方向  （因为使用减法，可能会溢出，从而导致异常结果） （hash不相同，对象一定不相等）
+                if (h1 > h2) {
+                node = node.right;
+            } else if (h1 < h2) {
                 node = node.left;
-            }else {
+
+                // hash值相同，进一步判断key对象是否相等equals，用以命中目标  （hash相同，对象不一定相等）
+            } else if (Objects.equals(k1, k2)) {
+                return node;
+
+                // hash相同，key对象不相等equals，类型不同，根据类名确认桶内红黑树寻找方向
+            } else if (k1 != null && k2 != null && k1.getClass() != k2.getClass()) {
+                String k1ClsName = k1.getClass().getName();
+                String k2ClsName = k2.getClass().getName();
+                cmp = k1ClsName.compareTo(k2ClsName);
+                if (cmp > 0) {
+                    node = node.right;
+                } else if (cmp < 0) {
+                    node = node.left;
+                }
+
+                // hash相同，key对象不相等equals，类型相同，并且具备可比较性，根据自带比较方法确认桶内红黑树寻找方向（比较得是不等于的情况，如果是等于则和equals冲突，等于当做是无法寻找方向的情况）
+            } else if (k1 != null && k2 != null
+                    && k1.getClass() == k2.getClass()
+                    && k1 instanceof Comparable
+                    && (cmp = ((Comparable) k1).compareTo(k2)) != 0) {
+                node = cmp > 0 ? node.right : node.left;
+
+                // hash相同，key对象不相等equals，类型相同，并且不具备可比较性，没有任何方式来确认桶内红黑树寻找方向了，也就是无法寻找方向，只能进行一次完整红黑树扫描，看看能不能找到节点equals情况，找到了就返回，找不到就结束
+            } else if (node.left != null && (result = node(node.left, k1)) != null) {
+                return result;
+            } else {
+                    // 扫描，往左边找
                 node = node.right;
             }
-        }
+        } while (node != null);
+
         return null;
     }
 
-    private V remove(Node<K,V> node){
+    private V remove(Node<K, V> node) {
         if (node == null) return null;
         // 长度--
         size--;
@@ -196,9 +312,9 @@ public class HashMap<K, V> implements Map<K, V> {
         V oldValue = node.value;
 
         // 度为2的节点
-        if (node.hasTwoChild()){
+        if (node.hasTwoChild()) {
             // 找到前驱节点
-            Node<K,V> predecessor = predecessor(node);
+            Node<K, V> predecessor = predecessor(node);
             // 用前驱节点的值覆盖，度为2节点的值
             node.key = predecessor.key;
             node.value = predecessor.value;
@@ -210,7 +326,7 @@ public class HashMap<K, V> implements Map<K, V> {
         // 删除node节点
 
         // 替代节点 是删除节点的子节点
-        Node<K,V> alternateNode = node.left != null ? node.left : node.right;
+        Node<K, V> alternateNode = node.left != null ? node.left : node.right;
 
         int index = index(node);
 
@@ -228,10 +344,10 @@ public class HashMap<K, V> implements Map<K, V> {
             } else {
                 node.parent.right = alternateNode;
             }
-        }else if (node.parent == null){
+        } else if (node.parent == null) {
             // 叶子节点，并且是根节点，直接设置根节点为NULL
             table[index] = null;
-        }else {
+        } else {
             // 叶子节点，并且不是根节点，将父节点指向删除节点的关系置为null
             if (node.parent.left == node) {
                 node.parent.left = null;
@@ -251,22 +367,22 @@ public class HashMap<K, V> implements Map<K, V> {
      */
 
     // 寻找前驱节点
-    private Node<K,V> predecessor(Node<K,V> node){
+    private Node<K, V> predecessor(Node<K, V> node) {
         if (node == null) return null;
 
         // 前驱
-        Node<K,V> pre = node.left;
+        Node<K, V> pre = node.left;
 
         // 前驱节点在左子树当中 （left.right.right.right......)
-        if (pre != null){
-            while (pre.right != null){
+        if (pre != null) {
+            while (pre.right != null) {
                 pre = pre.right;
             }
             return pre;
         }
 
         // 前驱节点在其父、祖父中 (parent.parent.parent....... && parent.right = node)
-        while (node.parent != null && node.parent.right != node){
+        while (node.parent != null && node.parent.right != node) {
             node = node.parent;
         }
 
