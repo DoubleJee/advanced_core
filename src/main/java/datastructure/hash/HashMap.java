@@ -66,8 +66,8 @@ public class HashMap<K, V> implements Map<K, V> {
         // 新添加的key
         K k1 = key;
         // 新添加key的hash值
-        int h1 = key == null ? 0 : k1.hashCode();
-        Node<K, V> result = null;
+        int h1 = hash(k1);
+        Node<K, V> result;
         // 完整扫描
         boolean searched = false;
         do {
@@ -85,11 +85,11 @@ public class HashMap<K, V> implements Map<K, V> {
             } else if (Objects.equals(k1, k2)) {
                 cmp = 0;
 
-                // 类型不同，根据类名确认桶内红黑树寻找方向
-            } else if (k1 != null && k2 != null && k1.getClass() != k2.getClass()) {
-                String k1ClsName = k1.getClass().getName();
-                String k2ClsName = k2.getClass().getName();
-                cmp = k1ClsName.compareTo(k2ClsName);
+//                // 类型不同，根据类名确认桶内红黑树寻找方向
+//            } else if (k1 != null && k2 != null && k1.getClass() != k2.getClass()) {
+//                String k1ClsName = k1.getClass().getName();
+//                String k2ClsName = k2.getClass().getName();
+//                cmp = k1ClsName.compareTo(k2ClsName);
 
                 // 类型相同，具备可比较性，根据自带比较方法确认桶内红黑树寻找方向（比较得是不等于的情况，如果是等于则和equals冲突，等于当做是无法寻找方向的情况）
             } else if (k1 != null && k2 != null
@@ -131,6 +131,8 @@ public class HashMap<K, V> implements Map<K, V> {
                 V oldValue = node.value;
                 node.key = key;
                 node.value = value;
+                // 可以不覆盖因为相等，hash值是一样的
+//                node.hash = h1;
                 return oldValue;
             }
         } while (node != null);
@@ -201,19 +203,22 @@ public class HashMap<K, V> implements Map<K, V> {
 
     // 根据key计算出对应的索引（在桶数组的位置）
     private int index(K key) {
+        // 取模，用位运算优化
+        return hash(key) & (table.length - 1);
+    }
+
+    // hash函数 扰动计算
+    private int hash(K key){
         // key为null，默认为0，会放在桶的0的下标位置
         int hashCode = key == null ? 0 : key.hashCode();
-        // 因为不知道key实现的hashCode方法是否均匀，为了保险起见，使哈希散布均匀，再进行一次运算处理
+        // 因为不知道key实现的hashCode方法是否均匀，为了保险起见，使哈希散布均匀，再进行一次运算处理，也叫做扰动计算
         hashCode = hashCode ^ (hashCode >>> 16);
-        // 取模，用位运算优化
-        return hashCode & (table.length - 1);
+        return hashCode;
     }
 
     // 用于已存在的红黑树节点得到 其所在的索引
     private int index(Node<K, V> node) {
-        int hashCode = node.hash;
-        hashCode = hashCode ^ (hashCode >>> 16);
-        return hashCode & (table.length - 1);
+        return node.hash & (table.length - 1);
     }
 
     // 哈希冲突，key比较
@@ -258,9 +263,9 @@ public class HashMap<K, V> implements Map<K, V> {
     // 根据key寻找该节点与子树有没有，key相等的节点
     private Node<K, V> node(Node<K, V> node, K k1) {
         if (node == null) return null;
-        int h1 = k1 == null ? 0 : k1.hashCode();
-        Node<K, V> result = null;
-        int cmp = 0;
+        int h1 = hash(k1);
+        Node<K, V> result;
+        int cmp;
         do {
             int h2 = node.hash;
             K k2 = node.key;
@@ -274,16 +279,16 @@ public class HashMap<K, V> implements Map<K, V> {
             } else if (Objects.equals(k1, k2)) {
                 return node;
 
-                // hash相同，key对象不相等equals，类型不同，根据类名确认桶内红黑树寻找方向
-            } else if (k1 != null && k2 != null && k1.getClass() != k2.getClass()) {
-                String k1ClsName = k1.getClass().getName();
-                String k2ClsName = k2.getClass().getName();
-                cmp = k1ClsName.compareTo(k2ClsName);
-                if (cmp > 0) {
-                    node = node.right;
-                } else if (cmp < 0) {
-                    node = node.left;
-                }
+//                // hash相同，key对象不相等equals，类型不同，根据类名确认桶内红黑树寻找方向
+//            } else if (k1 != null && k2 != null && k1.getClass() != k2.getClass()) {
+//                String k1ClsName = k1.getClass().getName();
+//                String k2ClsName = k2.getClass().getName();
+//                cmp = k1ClsName.compareTo(k2ClsName);
+//                if (cmp > 0) {
+//                    node = node.right;
+//                } else if (cmp < 0) {
+//                    node = node.left;
+//                }
 
                 // hash相同，key对象不相等equals，类型相同，并且具备可比较性，根据自带比较方法确认桶内红黑树寻找方向（比较得是不等于的情况，如果是等于则和equals冲突，等于当做是无法寻找方向的情况）
             } else if (k1 != null && k2 != null
@@ -640,7 +645,9 @@ public class HashMap<K, V> implements Map<K, V> {
 
         public Node(K key, V value, Node<K, V> parent) {
             this.key = key;
-            this.hash = key == null ? 0 : key.hashCode();
+            int hashCode = key == null ? 0 : key.hashCode();
+            // 扰动计算
+            this.hash = hashCode ^ (hashCode >>> 16);
             this.value = value;
             this.parent = parent;
         }
