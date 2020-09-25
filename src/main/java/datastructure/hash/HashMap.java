@@ -21,6 +21,9 @@ public class HashMap<K, V> implements Map<K, V> {
     // 哈希表默认容量，最好是2的n次方，可以方便取模运算优化成位运算，默认是4次方，16
     private static final int DEFAULT_CAPACITY = 1 << 4;
 
+    // 标准填充因子
+    private static final float DEFAULT_LOAD_FACTOR = 0.75f;
+
     public HashMap() {
         table = new Node[DEFAULT_CAPACITY];
     }
@@ -47,6 +50,8 @@ public class HashMap<K, V> implements Map<K, V> {
 
     @Override
     public V put(K key, V value) {
+        // 扩容
+        resize();
         int index = index(key);
         Node<K, V> root = table[index];
         if (root == null) {
@@ -85,6 +90,8 @@ public class HashMap<K, V> implements Map<K, V> {
             } else if (Objects.equals(k1, k2)) {
                 cmp = 0;
 
+                // 更新！！！类型不同，也当作是无法寻找方向的情况，扫描处理
+
 //                // 类型不同，根据类名确认桶内红黑树寻找方向
 //            } else if (k1 != null && k2 != null && k1.getClass() != k2.getClass()) {
 //                String k1ClsName = k1.getClass().getName();
@@ -95,7 +102,7 @@ public class HashMap<K, V> implements Map<K, V> {
             } else if (k1 != null && k2 != null
                     && k1.getClass() == k2.getClass()
                     && k1 instanceof Comparable
-                    && (cmp = ((Comparable) k1).compareTo(k2)) == 0) {
+                    && (cmp = ((Comparable) k1).compareTo(k2)) != 0) {
 
                 // 没有任何方式来确认桶内红黑树寻找方向了，也就是无法寻找方向，只能进行一次完整扫描，看看能不能找到节点equals情况
             } else if (!searched) {
@@ -200,6 +207,99 @@ public class HashMap<K, V> implements Map<K, V> {
 
     }
 
+    // 扩容
+    private void resize(){
+        // 填充因子 <= 0.75 不需要扩容挪动
+        if (size / table.length <= DEFAULT_LOAD_FACTOR) return;
+
+        // 扩容为原来的2倍
+        Node<K,V> [] oldTable = table;
+        table = new Node[oldTable.length << 1];
+
+        // 遍历所有节点一一挪动，不是新建节点
+        Queue<Node<K, V>> queue = new Queue<>();
+        for (Node<K, V> root : oldTable) {
+            if (root == null) continue;
+            queue.enQueue(root);
+            while (!queue.isEmpty()) {
+                Node<K, V> node = queue.deQueue();
+                if (node.left != null) queue.enQueue(node.left);
+                if (node.right != null) queue.enQueue(node.right);
+
+                // 将左右节点放入之后，再挪动
+                moveNode(node);
+            }
+        }
+    }
+
+
+    // 挪动节点
+    private void moveNode(Node<K,V> moveNode){
+        // 将要挪动节点的关系全部斩断，变为初始新增的节点一样
+        moveNode.parent = null;
+        moveNode.left = null;
+        moveNode.right = null;
+        moveNode.color = RED;
+
+        // 重新计算索引
+        int index = index(moveNode.key);
+
+        Node<K, V> root = table[index];
+        if (root == null) {
+            root = moveNode;
+            afterPut(root);
+            table[index] = root;
+            return;
+        }
+
+        // 哈希冲突
+        Node<K, V> parent;
+        Node<K, V> node = root;
+        int cmp;
+
+        // 要挪动节点的key
+        K k1 = moveNode.key;
+        // 新要挪动key的hash值
+        int h1 = hash(k1);
+        do {
+            parent = node;
+            K k2 = node.key;
+            int h2 = node.hash;
+
+            // 按照put的规则，来确认方向
+
+            // hash值比较，用以确认桶内的红黑树挪动方向
+            if (h1 > h2) {
+                cmp = 1;
+            } else if (h1 < h2) {
+                cmp = -1;
+                // 类型相同，具备可比较性，根据自带比较方法确认桶内红黑树挪动方向，并且要是不等于0情况，等于0按照不知道如何挪动情况处理
+            } else if (k1 != null && k2 != null
+                    && k1.getClass() == k2.getClass()
+                    && k1 instanceof Comparable
+                    && (cmp = ((Comparable) k1).compareTo(k2)) != 0) {
+            } else {
+                    // 没有任何方式来确认挪动方向，只能找个随机不唯一的方式来确认，那就是利用内存地址来比大小，来决定挪动的方向，内存地址没有负数所以不会溢出，不会出现异常
+                    cmp = System.identityHashCode(k1) - System.identityHashCode(k2);
+            }
+
+            if (cmp > 0) {
+                node = node.right;
+            } else if (cmp < 0) {
+                node = node.left;
+            }
+
+        } while (node != null);
+
+        // 看看挪动到父节点的哪个位置
+        moveNode.parent = parent;
+        if (cmp > 0) {
+            parent.right = moveNode;
+        } else {
+            parent.left = moveNode;
+        }
+        afterPut(moveNode);
+    }
 
     // 根据key计算出对应的索引（在桶数组的位置）
     private int index(K key) {
@@ -269,6 +369,9 @@ public class HashMap<K, V> implements Map<K, V> {
         do {
             int h2 = node.hash;
             K k2 = node.key;
+
+            // 按照put的规则，来确认方向
+
             // hash值直接比较，用以确认桶内的红黑树寻找方向  （因为使用减法，可能会溢出，从而导致异常结果） （hash不相同，对象一定不相等）
                 if (h1 > h2) {
                 node = node.right;
@@ -278,6 +381,8 @@ public class HashMap<K, V> implements Map<K, V> {
                 // hash值相同，进一步判断key对象是否相等equals，用以命中目标  （hash相同，对象不一定相等）
             } else if (Objects.equals(k1, k2)) {
                 return node;
+
+                // 更新！！！类型不同，也当作是无法寻找方向的情况，扫描处理
 
 //                // hash相同，key对象不相等equals，类型不同，根据类名确认桶内红黑树寻找方向
 //            } else if (k1 != null && k2 != null && k1.getClass() != k2.getClass()) {
