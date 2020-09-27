@@ -55,8 +55,8 @@ public class HashMap<K, V> implements Map<K, V> {
         int index = index(key);
         Node<K, V> root = table[index];
         if (root == null) {
-            root = new Node<>(key, value, null);
-            afterPut(root);
+            root = createNode(key, value, null);
+            fixAfterPut(root);
             table[index] = root;
             size++;
             return null;
@@ -145,13 +145,13 @@ public class HashMap<K, V> implements Map<K, V> {
         } while (node != null);
 
         // 看看插入到父节点的哪个位置
-        Node<K, V> newNode = new Node<>(key, value, parent);
+        Node<K, V> newNode = createNode(key, value, parent);
         if (cmp > 0) {
             parent.right = newNode;
         } else {
             parent.left = newNode;
         }
-        afterPut(newNode);
+        fixAfterPut(newNode);
         size++;
         return null;
     }
@@ -207,6 +207,11 @@ public class HashMap<K, V> implements Map<K, V> {
 
     }
 
+    // 创建节点 子类可以自己重写 工厂方法
+    protected Node<K, V> createNode(K key, V value, Node<K, V> parent) {
+        return new Node<>(key, value, parent);
+    }
+
     // 扩容
     private void resize(){
         // 填充因子 <= 0.75 不需要扩容挪动
@@ -247,7 +252,7 @@ public class HashMap<K, V> implements Map<K, V> {
         Node<K, V> root = table[index];
         if (root == null) {
             root = moveNode;
-            afterPut(root);
+            fixAfterPut(root);
             table[index] = root;
             return;
         }
@@ -298,7 +303,7 @@ public class HashMap<K, V> implements Map<K, V> {
         } else {
             parent.left = moveNode;
         }
-        afterPut(moveNode);
+        fixAfterPut(moveNode);
     }
 
     // 根据key计算出对应的索引（在桶数组的位置）
@@ -421,6 +426,9 @@ public class HashMap<K, V> implements Map<K, V> {
 
         V oldValue = node.value;
 
+        // 理应删除的节点
+        Node<K,V> willRemoveNode = node;
+
         // 度为2的节点
         if (node.hasTwoChild()) {
             // 找到前驱节点
@@ -467,8 +475,16 @@ public class HashMap<K, V> implements Map<K, V> {
 
         }
 
-        afterRemove(node);
+        fixAfterRemove(node);
+
+        // 删除后，交给子类扩展操作的模板方法
+        afterRemove(willRemoveNode,node);
         return oldValue;
+    }
+
+    // 删除节点之后的操作，子类可以重写 模板方法
+    protected void afterRemove(Node<K, V> willRemoveNode, Node<K, V> realRemoveNode) {
+
     }
 
 
@@ -500,7 +516,7 @@ public class HashMap<K, V> implements Map<K, V> {
     }
 
     // 增加后修复红黑树性质
-    private void afterPut(Node<K, V> node) {
+    private void fixAfterPut(Node<K, V> node) {
 
         Node<K, V> parent = node.parent;
 
@@ -521,7 +537,7 @@ public class HashMap<K, V> implements Map<K, V> {
             black(uncle);
 
             // 递归去修复
-            afterPut(grand);
+            fixAfterPut(grand);
             return;
         }
 
@@ -544,7 +560,7 @@ public class HashMap<K, V> implements Map<K, V> {
     }
 
     // 删除后修复红黑树性质
-    private void afterRemove(Node<K, V> node) {
+    private void fixAfterRemove(Node<K, V> node) {
         if (isRed(node)) return;
         if (!node.isRightChildOfParent() && !node.isLeftChildOfParent()) {
             Node<K, V> replaceNode = node.left == null ? node.right : node.left;
@@ -597,7 +613,7 @@ public class HashMap<K, V> implements Map<K, V> {
             } else {
                 red(sibling);
                 if (isBlack(parent)) {
-                    afterRemove(parent);
+                    fixAfterRemove(parent);
                     return;
                 }
                 black(parent);
@@ -613,7 +629,7 @@ public class HashMap<K, V> implements Map<K, V> {
 
             red(parent);
             black(sibling);
-            afterRemove(node);
+            fixAfterRemove(node);
         }
 
     }
@@ -738,7 +754,7 @@ public class HashMap<K, V> implements Map<K, V> {
 
 
     // 红黑树节点
-    class Node<K, V> {
+    protected class Node<K, V> {
         private boolean color = RED;
         // 每个节点key的hash值
         int hash;

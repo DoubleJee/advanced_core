@@ -18,4 +18,9 @@ public class Key {
         if (obj.getClass() != getClass()) return false;
         return this.value == ((Key)obj).value;
     }
+
+    @Override
+    public String toString() {
+        return String.valueOf(this.value);
+    }
 }
