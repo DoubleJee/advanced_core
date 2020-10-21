@@ -7,7 +7,7 @@ public class ClassLoadTest {
 
     public static void main(String[] args) throws ClassNotFoundException, IllegalAccessException, InstantiationException {
         //类加载器 通过全限定名获取该类的二进制字节流，如何获取，去实现的就是类加载器
-        //破坏双亲委派
+        //重写loadClass实现，破坏双亲委派
         ClassLoader classLoader = new ClassLoader() {
             @Override
             public Class<?> loadClass(String name) throws ClassNotFoundException {
@@ -30,7 +30,7 @@ public class ClassLoadTest {
                 throw new ClassNotFoundException(name);
             }
 
-            //通过双亲委派
+            // 只实现自身的加载过程，不会破坏双亲委派
             @Override
             protected Class<?> findClass(String name) throws ClassNotFoundException {
                 //确定class文件名
