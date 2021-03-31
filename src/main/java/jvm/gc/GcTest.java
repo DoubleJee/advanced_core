@@ -21,3 +21,22 @@ public class GcTest {
     }
 
 }
+
+class LocalSotGC {
+
+
+    // 局部变量表槽复用对GC的影响
+    public static void main(String[] args) {
+        {
+            byte[] placeholder = new byte[64 * 1024 * 1024];
+        }
+        // 离开了作用域，因为槽复用，placeholder还在指向64M的大小的对象
+
+        // 因为槽复用，placeholder所在的槽，被替换给a变量使用
+        int a = 0;
+        // 这时候gc，64M对象没有被局部变量槽所引用指向，便回收了
+        System.gc();
+    }
+
+
+}
