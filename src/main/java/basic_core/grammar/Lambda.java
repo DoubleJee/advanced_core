@@ -87,7 +87,8 @@ public class Lambda {
         System.out.println(maxNumberTask.test(5,7));
 
 
-        // 特定类型任意实例 方法引用，    v1.compareTo(v2)
+        // 特定类型任意对象的实例方法引用，    v1.compareTo(v2)
+        // 会将第一个参数作为调用方法的对象（调用者），其他的作为实例方法的参数
         NumberTask compareNumberTask = Integer::compareTo;
 
 
