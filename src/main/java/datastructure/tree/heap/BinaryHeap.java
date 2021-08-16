@@ -55,6 +55,7 @@ public class BinaryHeap<E> extends AbstractHeap<E> implements BinaryTreeInfo {
         size = 0;
     }
 
+    // O(logn)
     @Override
     public void add(E element) {
         // 空元素检查
@@ -67,12 +68,14 @@ public class BinaryHeap<E> extends AbstractHeap<E> implements BinaryTreeInfo {
         siftUp(size - 1);
     }
 
+    // O(1)
     @Override
     public E get() {
         emptyCheck();
         return elements[0];
     }
 
+    // O(logn)
     @Override
     public E remove() {
         emptyCheck();
@@ -87,6 +90,7 @@ public class BinaryHeap<E> extends AbstractHeap<E> implements BinaryTreeInfo {
         return root;
     }
 
+    // O(logn)
     @Override
     public E replace(E element) {
         elementNotNullCheck(element);

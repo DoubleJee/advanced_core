@@ -30,10 +30,12 @@ public class PriorityQueue<E> {
         heap.add(element);
     }
 
+    // 优先级最高的优先出队
     public E deQueue(){
         return heap.remove();
     }
 
+    // 看一下优先级最高的
     public E front(){
         return heap.get();
     }
