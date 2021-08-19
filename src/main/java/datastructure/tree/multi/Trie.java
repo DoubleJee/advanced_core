@@ -8,7 +8,7 @@ public class Trie<V> {
 
     private int size;
 
-    private Node<V> root = new Node<>(null, null);
+    private Node<V> root;
 
     public int size(){
         return size;
@@ -20,7 +20,7 @@ public class Trie<V> {
 
     public void clear(){
         size = 0;
-        root.getChildren().clear();
+        root = null;
     }
 
     // 是否包含某个字符串
@@ -32,56 +32,46 @@ public class Trie<V> {
 
     public V add(String key, V value) {
         keyCheck(key);
-//        if (root == null) {
-//            // 初始化根节点
-//            root = new Node<>();
-//            root.children = new HashMap<>();
-//        }
-//
-//        Node<V> node = root;
-//        int len = key.length();
-//        for (int i = 0; i < len; i++) {
-//            char c = key.charAt(i);
-//            if (node.children == null) {
-//                node.children = new HashMap<>();
-//            }
-//            Node<V> nextNode = node.children.get(c);
-//            if (nextNode == null) {
-//                nextNode = new Node<>();
-//                node.children.put(c, nextNode);
-//            }
-//
-//            node = nextNode;
-//        }
-//
-//
-//        // 如果已经存在这个单词
-//        if (node.word) {
-//            V oldValue = node.value;
-//            node.value = value;
-//            return oldValue;
-//        }
-//
-//        // 新增单词
-//        node.word = true;
-//        node.value = value;
-//        size++;
-//        return value;
+        if (root == null) {
+            // 初始化根节点
+            root = new Node<>(null, null);
+        }
+
 
         Node<V> node = root;
         int len = key.length();
         for (int i = 0; i < len; i++) {
             char c = key.charAt(i);
-            Node<V> nextNode = node.getChildren().get(c);
+            boolean emptyChildren = node.children == null;
+            Node<V> findNode = emptyChildren ? null : node.children.get(c);
 
             // 如果没有这个字符节点，则新建它并建立好关系
-            if (nextNode == null) {
-                nextNode = new Node<>(c, node);
-                node.getChildren().put(c, nextNode);
+            if (findNode == null) {
+                findNode = new Node<>(c, node);
+                // 放入字符节点之前，先初始化子节点容器（用时创建）
+                if (emptyChildren) node.children = new HashMap<>();
+                node.children.put(c, findNode);
             }
 
-            node = nextNode;
+            // 继续往下
+            node = findNode;
         }
+
+
+//        Node<V> node = root;
+//        int len = key.length();
+//        for (int i = 0; i < len; i++) {
+//            char c = key.charAt(i);
+//            Node<V> findNode = node.getChildren().get(c);
+//
+//            // 如果没有这个字符节点，则新建它并建立好关系
+//            if (findNode == null) {
+//                findNode = new Node<>(c, node);
+//                node.getChildren().put(c, findNode);
+//            }
+//
+//            node = findNode;
+//        }
 
         // 之前存在这个单词
         if (node.word) {
@@ -100,8 +90,7 @@ public class Trie<V> {
 
     public V get(String key) {
         Node<V> node = node(key);
-        // 不是单词节点value为null
-        return node != null ? node.value : null;
+        return node != null && node.word ? node.value : null;
     }
 
     public V remove(String key){
@@ -111,8 +100,8 @@ public class Trie<V> {
 
         V oldValue = node.value;
 
-        // 单词节点有其他子节点
-        if (!node.getChildren().isEmpty()) {
+        // 单词节点有其他子节点，直接将它变成字符节点
+        if (node.children != null && !node.children.isEmpty()) {
             node.word = false;
             node.value = null;
             size--;
@@ -120,15 +109,16 @@ public class Trie<V> {
         }
 
 
-        // 单词节点没有其他子节点
+        // 单词节点没有其他子节点，可以往上删除
         Node<V> parent;
         while ((parent = node.parent) != null) {
-            // 从父节点中删除
-            parent.getChildren().remove(node.character);
+            // 从父节点中删除自己
+            parent.children.remove(node.character);
 
-            // 父节点是单词节点，或者父节点有其他子节点，代表父节点是其他单词的前缀，不用继续向上删除，结束
-            if (parent.word || !parent.getChildren().isEmpty()) break;
+            // 父节点是单词节点，或者父节点有其他子节点，代表父节点是其他单词的前缀，不能继续往上删除，结束
+            if (parent.word || !parent.children.isEmpty()) break;
 
+            // 继续往上
             node = parent;
         }
 
@@ -149,23 +139,20 @@ public class Trie<V> {
         Node<V> node = root;
         int len = key.length();
 
-//        // 从根节点依次往下查找   （每一层一个字符）
-//        for (int i = 0; i < len; i++) {
-//            // 如果还有下一个字符需要查找，但是当前节点已经是空，或者子节点是空，就没找到，返回null
-//            if (node == null || node.children == null || node.children.isEmpty()) {
-//                return null;
-//            }
-//            char c = key.charAt(i);
-//            node = node.children.get(c);
-//        }
-//
-//        return node;
-
+        // 从根节点依次每个字符往下查找
         for (int i = 0; i < len; i++) {
+            // 查找字符，但是当前节点已经是空（上一次查找的结果没找到），或者子节点是空，代表没找到（没有必要往下找），返回null
+            if (node == null || node.children == null || node.children.isEmpty()) return null;
             char c = key.charAt(i);
-            node = node.getChildren().get(c);
-            if (node == null) return null;
+            node = node.children.get(c);
         }
+
+
+//        for (int i = 0; i < len; i++) {
+//            char c = key.charAt(i);
+//            node = node.getChildren().get(c);
+//            if (node == null) return null;
+//        }
 
         return node;
     }
@@ -193,9 +180,9 @@ public class Trie<V> {
             this.parent = parent;
         }
 
-        Map<Character, Node<V>> getChildren() {
-            return children == null ? children = new HashMap<>() : children;
-        }
+//        Map<Character, Node<V>> getChildren() {
+//            return children == null ? children = new HashMap<>() : children;
+//        }
     }
 
 
