@@ -11,12 +11,12 @@ public class BubbleSort {
     /**
      * 冒泡排序
      *
-     * 时间复杂度：最好：O(n)，最坏、平均：O(n2)
+     * 时间复杂度：最好：O(n); 最坏、平均：O(n^2)
      *
      * 空间复杂度：O(1)
      *
      * 稳定算法
-     * 因为两个数比较，相等的时候不会交换他们位置
+     * 因为两个数比较，相等的时候不会交换他们位置，相对位置没有变，先出现的在后出现的前面
      * 如果将冒泡算法改成 <= 前面的元素，交换位置，那会变成不稳定算法
      *
      * 原地算法
@@ -34,7 +34,7 @@ public class BubbleSort {
 
 
     // 基础冒泡
-    private static void basicBubble(Integer[] array) {
+    static void basicBubble(Integer[] array) {
         // 最开始从头比较到尾
         for (int end = array.length - 1; end > 0; end--) {
             // 每次比，都会把 最大的数 放到比较数中的最后一个位置
@@ -71,7 +71,7 @@ public class BubbleSort {
     }
 
 
-    // 尾部有序冒泡优化，发现尾部已经有序，下次循环比较排序的时候直接忽略它们    （记录最后一次交换位置，代表已经有序的尾部）
+    // 尾部有序冒泡优化，发现尾部已经有序，下次循环比较排序的时候直接忽略它们，同时也保证了完全有序的优化    （记录最后一次交换位置，代表已经有序的尾部）
     private static void tailSortedBubble(Integer[] array) {
         for (int end = array.length - 1; end > 0; end--) {
             int sortedIndex = 1; // 默认给1，如果一次交换都没有，最后end--，就可以提前退出（在完全有序的时候有用）
