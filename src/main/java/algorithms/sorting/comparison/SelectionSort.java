@@ -29,7 +29,7 @@ public class SelectionSort {
 
     public static void main(String[] args) {
 
-        Integer[] random = Integers.tailAscOrder(1, 10000, 2000);
+        Integer[] random = Integers.random(10000, 1, 20000);
         TimeTool.checkTime("选择排序", () -> selectionSort(Integers.copy(random)));
         TimeTool.checkTime("冒泡排序", () -> BubbleSort.basicBubble(Integers.copy(random)));
 
