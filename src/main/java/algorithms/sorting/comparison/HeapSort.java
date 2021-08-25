@@ -26,7 +26,7 @@ public class HeapSort<E> extends Sort<E> {
             // 堆大小--
             heapSize--;
 
-            // 新交换的堆顶0下滤，下滤比较后，堆顶重新变为最大的
+            // 新交换的堆顶0下滤，下滤比较后，堆顶重新变为最大的（恢复堆的性质）
             siftDown(0);
         }
 
@@ -46,7 +46,7 @@ public class HeapSort<E> extends Sort<E> {
                 child = array[rightIndex];
             }
 
-            if (cmpElements(element, child) >= 0) break;
+            if (cmp(element, child) >= 0) break;
 
             array[index] = child;
             index = childIndex;

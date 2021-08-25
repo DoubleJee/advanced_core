@@ -1,6 +1,7 @@
 package algorithms.sorting.comparison;
 
 import algorithms.sorting.comparison.util.Integers;
+import datastructure.AssertTool;
 
 import java.util.Arrays;
 
@@ -17,7 +18,9 @@ public class ComparisonTest {
 
     static void testSorts(Integer[] array, Sort<Integer>... sorts) {
         for (Sort<Integer> sort : sorts) {
-            sort.sort(Integers.copy(array));
+            Integer[] newArray = Integers.copy(array);
+            sort.sort(newArray);
+            AssertTool.test(Integers.isAscOrder(newArray));
         }
 
         Arrays.sort(sorts);
