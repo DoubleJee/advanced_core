@@ -12,7 +12,8 @@ public class ComparisonTest {
         testSorts(random,
                 new BubbleSort<>(),
                 new SelectionSort<>(),
-                new HeapSort<>()
+                new HeapSort<>(),
+                new InsertionSort<>()
         );
     }
 
