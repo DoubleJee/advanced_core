@@ -31,8 +31,7 @@ public class BubbleSort<E> extends Sort<E> {
     }
 
     // 基础冒泡
-    @Override
-    protected void sort() {
+    public void basicBubble() {
         // 最开始从头比较到尾
         for (int end = array.length - 1; end > 0; end--) {
             // 每次比，都会把 最大的数 放到比较数中的最后一个位置
@@ -65,7 +64,8 @@ public class BubbleSort<E> extends Sort<E> {
 
 
     // 尾部有序冒泡优化，发现尾部已经有序，下次循环比较排序的时候直接忽略它们，同时也保证了完全有序的优化    （记录最后一次交换位置，代表已经有序的尾部）
-    public void tailSortedBubble() {
+    @Override
+    protected void sort() {
         for (int end = array.length - 1; end > 0; end--) {
             int sortedIndex = 1; // 默认给1，如果一次交换都没有，最后end--，就可以提前退出（在完全有序的时候有用）
 
