@@ -13,7 +13,8 @@ public class ComparisonTest {
                 new BubbleSort<>(),
                 new SelectionSort<>(),
                 new HeapSort<>(),
-                new InsertionSort<>()
+                new InsertionSort<>(),
+                new MergeSort<>()
         );
     }
 
