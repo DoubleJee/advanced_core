@@ -2,33 +2,33 @@ package algorithms.sorting.comparison.model;
 
 public class Student implements Comparable<Student> {
 
+    private int age;
+
     private double score;
 
-    private String name;
-
-    public Student(double score, String name) {
+    public Student(int age, double score) {
+        this.age = age;
         this.score = score;
-        this.name = name;
+    }
+
+    public int getAge() {
+        return age;
     }
 
     public double getScore() {
         return score;
     }
 
-    public String getName() {
-        return name;
-    }
-
     @Override
     public int compareTo(Student o) {
-        return (int) (this.score - o.score);
+        return this.age - o.age;
     }
 
     @Override
     public String toString() {
         return "Student{" +
-                "score=" + score +
-                ", name='" + name + '\'' +
+                "age=" + age +
+                ", score=" + score +
                 '}';
     }
 }

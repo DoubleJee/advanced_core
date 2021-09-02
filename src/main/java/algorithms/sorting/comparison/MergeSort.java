@@ -60,12 +60,12 @@ public class MergeSort<E> extends Sort<E> {
 
             // 如果右边没结束，并且当前 右边元素 小于 左边元素，右边归并   （右 < 左，保证稳定；如果右边结束了，只需要将左边的依次归并就行了，不需要比较归并）
             if (ri < re && cmp(array[ri], leftArray[li]) < 0) {
-                // 右边归并
+                // 右边元素去归并
                 array[ai] = array[ri];
                 ai++;
                 ri++;
             } else {
-                // 左边归并
+                // 左边元素去归并
                 array[ai] = leftArray[li];
                 ai++;
                 li++;

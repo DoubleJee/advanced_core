@@ -91,10 +91,20 @@ public abstract class Sort<E> implements Comparable<Sort<E>> {
 
     // 是否稳定
     private boolean isStable(){
-        Student [] students = { new Student(100,"小明"), new Student(100, "小红") };
+        Student[] students = new Student[20];
+        for (int i = 0; i < students.length; i++) {
+            students[i] = new Student(18, i * 10);
+        }
 
         sort((E[]) students);
 
-        return students[0].getName().equals("小明");
+        for (int i = 1; i < students.length; i++) {
+            // 排好序后，每个也应该比前一个分数相差10
+            if (students[i].getScore() - students[i - 1].getScore() != 10){
+                return false;
+            }
+        }
+
+        return true;
     }
 }
