@@ -91,6 +91,10 @@ public abstract class Sort<E> implements Comparable<Sort<E>> {
 
     // 是否稳定
     private boolean isStable(){
+
+        // 希尔排序比较特殊，就属于不稳定排序
+        if (this instanceof ShellSort) return false;
+
         Student[] students = new Student[20];
         for (int i = 0; i < students.length; i++) {
             students[i] = new Student(18, i * 10);

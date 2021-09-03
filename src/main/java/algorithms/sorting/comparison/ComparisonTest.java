@@ -15,7 +15,8 @@ public class ComparisonTest {
                 new HeapSort<>(),
                 new InsertionSort<>(),
                 new MergeSort<>(),
-                new QuickSort<>()
+                new QuickSort<>(),
+                new ShellSort<>()
         );
     }
 

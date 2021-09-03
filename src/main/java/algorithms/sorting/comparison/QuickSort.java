@@ -16,7 +16,7 @@ public class QuickSort<E> extends Sort<E> {
         // 如果这个范围就一个元素，已经是轴点，无需再建轴，已经有序
         if (end - begin < 2) return;
 
-        // 先将此范围构造轴点，然后以轴点位置分割分开成两个部分，再分别去快速排序
+        // 先将此范围构造轴点，然后以轴点位置分割分开成两个部分（小于轴的放左部，大于轴的放右部），再分别去快速排序
         int pid = buildPivot(begin, end);
 
         // 左边部分
