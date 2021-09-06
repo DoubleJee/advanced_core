@@ -2,6 +2,7 @@ package algorithms.sorting;
 
 import algorithms.sorting.comparison.ShellSort;
 import algorithms.sorting.comparison.model.Student;
+import algorithms.sorting.nocmp.CountingSort;
 
 import java.text.DecimalFormat;
 import java.util.Comparator;
@@ -95,6 +96,7 @@ public abstract class Sort<E> implements Comparable<Sort<E>> {
 
         // 希尔排序比较特殊，就属于不稳定排序
         if (this instanceof ShellSort) return false;
+        if (this instanceof CountingSort) return true;
 
         Student[] students = new Student[20];
         for (int i = 0; i < students.length; i++) {
