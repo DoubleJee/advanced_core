@@ -1,6 +1,7 @@
 package algorithms.sorting.comparison;
 
 
+import algorithms.sorting.Sort;
 import algorithms.sorting.comparison.util.Integers;
 import datastructure.AssertTool;
 import datastructure.TimeTool;

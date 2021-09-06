@@ -1,5 +1,7 @@
 package algorithms.sorting.comparison;
 
+import algorithms.sorting.Sort;
+
 import java.util.ArrayList;
 import java.util.List;
 

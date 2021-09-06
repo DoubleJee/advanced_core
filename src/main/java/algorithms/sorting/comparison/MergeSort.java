@@ -1,5 +1,7 @@
 package algorithms.sorting.comparison;
 
+import algorithms.sorting.Sort;
+
 // 归并排序
 public class MergeSort<E> extends Sort<E> {
 

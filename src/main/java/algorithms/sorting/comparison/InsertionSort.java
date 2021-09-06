@@ -1,5 +1,7 @@
 package algorithms.sorting.comparison;
 
+import algorithms.sorting.Sort;
+
 // 插入排序
 public class InsertionSort<E> extends Sort<E> {
 

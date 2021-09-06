@@ -1,5 +1,6 @@
-package algorithms.sorting.comparison;
+package algorithms.sorting;
 
+import algorithms.sorting.comparison.ShellSort;
 import algorithms.sorting.comparison.model.Student;
 
 import java.text.DecimalFormat;

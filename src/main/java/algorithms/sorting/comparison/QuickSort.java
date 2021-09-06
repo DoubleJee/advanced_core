@@ -1,5 +1,7 @@
 package algorithms.sorting.comparison;
 
+import algorithms.sorting.Sort;
+
 // 快速排序
 public class QuickSort<E> extends Sort<E> {
 
