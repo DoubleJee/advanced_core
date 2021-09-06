@@ -39,9 +39,9 @@ public class CountingSort extends Sort<Integer> {
             counts[i] += counts[i - 1];
         }
 
-        // 为了保证稳定性，从右往左遍历原数组，确定每个整数在有序数组的索引位置，并且选择挪动过去，而不是直接生成值放进去
+        // 为了保证稳定性，从后往前遍历原数组，确定每个整数在有序数组的索引位置，并且选择挪动过去，而不是直接生成值放进去
         int [] sortedArray = new int[array.length];
-        for (int i = 0; i < array.length; i++) {
+        for (int i = array.length - 1; i >= 0; i--) {
             // 统计数组存储的出现次数 - 1，得出有序数组索引位置，因为要将它挪动过去，对应维护统计数组正确出现次数，将出现次数--，两步合成一条代码   （次数--，也代表在他前面也包含自己的个数减少了，下次遇到相同整数，求出正确索引）
             int index = --counts[array[i] - min];
 
