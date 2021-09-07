@@ -39,5 +39,11 @@ public class SortingCore {
 
     /**
      * 比较排序
+     * 无法突破 O(nlogn)级别
+     */
+
+    /**
+     * 非比较排序
+     * 可以突破 O(nlogn)级别
      */
 }

@@ -2,6 +2,7 @@ package algorithms.sorting;
 
 import algorithms.sorting.comparison.ShellSort;
 import algorithms.sorting.comparison.model.Student;
+import algorithms.sorting.nocmp.BucketSort;
 import algorithms.sorting.nocmp.CountingSort;
 import algorithms.sorting.nocmp.RadixSort;
 
@@ -99,6 +100,7 @@ public abstract class Sort<E> implements Comparable<Sort<E>> {
         if (this instanceof ShellSort) return false;
         if (this instanceof CountingSort) return true;
         if (this instanceof RadixSort) return true;
+        if (this instanceof BucketSort) return true;
 
         Student[] students = new Student[20];
         for (int i = 0; i < students.length; i++) {
