@@ -26,7 +26,7 @@ public class CountingSort extends Sort<Integer> {
 
         // 创建统计数组   （长度为最大数到最少数之间的 个数）
         int [] counts = new int[max - min + 1];
-        // 统计每个整数的出现次数
+        // 统计每个整数的出现次数（计数）
         for (int i = 0; i < array.length; i++) {
             // 每个整数的值 - 最小值 算出的相对值，作为统计数组的索引，并计数    （节省内存，最小值索引从0开始，每个整数值分到相对索引；元素对应到数组索引，数组索引正好由小到大）
             counts[array[i] - min]++;
@@ -39,7 +39,7 @@ public class CountingSort extends Sort<Integer> {
             counts[i] += counts[i - 1];
         }
 
-        // 为了保证稳定性，从后往前遍历原数组，确定每个整数在有序数组的索引位置，并且选择挪动过去，而不是直接生成值放进去
+        // 为了保证稳定性，从后往前遍历原数组，确定每个整数在有序数组的索引位置，并且选择挪动过去，而不是直接生成值放进去  （相同的整数，从后遇到的放在后面）
         int [] sortedArray = new int[array.length];
         for (int i = array.length - 1; i >= 0; i--) {
             // 统计数组存储的出现次数 - 1，得出有序数组索引位置，因为要将它挪动过去，对应维护统计数组正确出现次数，将出现次数--，两步合成一条代码   （次数--，也代表在他前面也包含自己的个数减少了，下次遇到相同整数，求出正确索引）
@@ -69,7 +69,7 @@ public class CountingSort extends Sort<Integer> {
 
         // 创建统计数组
         int [] counts = new int[max + 1];
-        // 统计每个整数的出现次数
+        // 统计每个整数的出现次数（计数）
         for (int i = 0; i < array.length; i++) {
             // 每个整数的值 array[i]，作为统计数组的索引，并计数        （元素对应到数组索引，数组索引正好由小到大）
             counts[array[i]]++;
