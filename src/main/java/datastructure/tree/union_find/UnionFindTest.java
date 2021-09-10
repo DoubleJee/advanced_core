@@ -1,9 +1,11 @@
 package datastructure.tree.union_find;
 
+import datastructure.tree.UnionFind;
+
 public class UnionFindTest {
 
     public static void main(String[] args) {
-        QuickFind uf = new QuickFind(12);
+        UnionFind uf = new QuickUnion(12);
 
         uf.union(0,1);
         uf.union(0,4);
