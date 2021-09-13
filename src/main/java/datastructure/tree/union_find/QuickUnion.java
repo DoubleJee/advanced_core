@@ -6,11 +6,14 @@ public class QuickUnion extends AbstractUnionFind {
         super(capacity);
     }
 
+    /*
+     * 索引是元素，数父组值是元素，根节点的父元素是自己
+     */
     @Override
     public int find(int v) {
         rangeCheck(v);
 
-        // 当前节点不是根节点
+        // 当前节点不是根节点，向上寻找
         while (parents[v] != v) {
             // 将父节点的值赋给v
            v = parents[v];
@@ -20,6 +23,7 @@ public class QuickUnion extends AbstractUnionFind {
         return v;
     }
 
+    // 将v1的根节点，嫁接到v2的根节点上
     @Override
     public void union(int v1, int v2) {
         // 查找v1、v2所在集合

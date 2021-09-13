@@ -3,7 +3,7 @@ package datastructure.tree;
 // 并查集
 public interface UnionFind {
 
-    // 查找v所在的集合 （根节点代表）
+    // 查找v所在的集合 （根节点代表）（默认左边的跟随右边的）
     int find(int v);
 
     // 合并v1和v2所在的集合

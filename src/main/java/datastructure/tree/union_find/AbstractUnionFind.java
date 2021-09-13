@@ -5,7 +5,7 @@ import datastructure.tree.UnionFind;
 // 抽象并查集 公共属性、逻辑
 public abstract class AbstractUnionFind implements UnionFind {
 
-    // 使用数组来表示并查集   （索引 代表元素，值 代表父元素）
+    // 使用数组来表示并查集   （索引 代表元素，值 代表父元素，  根节点的父元素是自己）
     protected int [] parents;
 
     public AbstractUnionFind(int capacity) {
@@ -25,7 +25,7 @@ public abstract class AbstractUnionFind implements UnionFind {
         return find(v1) == find(v2);
     }
 
-    // 检查操作值，是否大于范围
+    // 检查操作值，是否超出范围
     protected void rangeCheck(int v){
         if (v < 0 || v >= parents.length) throw new IllegalArgumentException("v is out of bounds");
     }
