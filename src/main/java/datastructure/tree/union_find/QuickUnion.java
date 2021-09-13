@@ -32,7 +32,7 @@ public class QuickUnion extends AbstractUnionFind {
         // 在同一个集合，不需要合并
         if (r1 == r2) return;
 
-        // r1根节点的父节点指向r2   （左边根节点的父节点指向右边根节点，完成合并）
+        // r1根节点的父节点指向r2   （默认 左边根节点的父节点指向右边根节点，完成合并）
         parents[r1] = r2;
     }
 }

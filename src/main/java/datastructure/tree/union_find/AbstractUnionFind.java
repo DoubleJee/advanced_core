@@ -2,10 +2,10 @@ package datastructure.tree.union_find;
 
 import datastructure.tree.UnionFind;
 
-// 抽象并查集 公共属性、逻辑
+// 抽象并查集 公共属性、逻辑 （基于整数）
 public abstract class AbstractUnionFind implements UnionFind {
 
-    // 使用数组来表示并查集   （索引 代表元素，值 代表父元素，  根节点的父元素是自己）
+    // 因为基于整数，可以使用数组来表示并查集   （索引 代表元素，值 代表父元素，  根节点的父元素是自己，顾名思义这个数组叫parents）
     protected int [] parents;
 
     public AbstractUnionFind(int capacity) {

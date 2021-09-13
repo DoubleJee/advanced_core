@@ -1,6 +1,6 @@
 package datastructure.tree;
 
-// 并查集
+// 并查集（基于整数）
 public interface UnionFind {
 
     // 查找v所在的集合 （根节点代表）（默认左边的跟随右边的）
