@@ -28,8 +28,10 @@ public class QuickUnion_Rank extends QuickUnion {
         // 高度低的树 嫁接到 高度高的树
         if (ranks[r1] < ranks[r2]) {
             parents[r1] = r2;
+            ranks[r1] = 0;
         } else if (ranks[r2] < ranks[r1]) {
             parents[r2] = r1;
+            ranks[r2] = 0;
         } else {
             // 高度一样，嫁接后，高度+1
             parents[r1] = r2;
