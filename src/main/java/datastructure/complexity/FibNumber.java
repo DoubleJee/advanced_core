@@ -8,7 +8,7 @@ public class FibNumber {
      * 0 1 1 2 3 5 8 13 21 ....
      */
 
-    //时间复杂度：O(2^n)，每一层是n的两倍
+    //时间复杂度：O(2^n)，每一层是n的两倍，每一次调用都会分叉调用2次
     public static int fib1(int n) {
         if (n <= 1) return n;
         int fibOne = fib1(n - 1);
