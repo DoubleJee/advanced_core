@@ -2,6 +2,7 @@ package algorithms.recursion;
 
 import datastructure.TimeTool;
 
+// 斐波那契数
 public class FibNumber {
 
     // 递归方式
@@ -24,7 +25,6 @@ public class FibNumber {
         array[1] = array[2] = 1;
         return fib1(n, array);
     }
-
     public static int fib1(int n, int [] array) {
         // 有结果，不用再次计算，递归基
         if (array[n] == 0) {
