@@ -4,10 +4,10 @@ package algorithms.back_tracking;
 public class NQueens {
 
     // 皇后摆放位置，数组索引是行号，数组元素是列号
-    int[] queens;
+    protected int[] queens;
 
     // 合理摆法
-    int ways;
+    protected int ways;
 
 
     public static void main(String[] args) {
@@ -15,7 +15,7 @@ public class NQueens {
     }
 
 
-    void placeQueens(int n){
+    void placeQueens(int n) {
         if (n < 1) return;
         // n个皇后
         queens = new int[n];
@@ -27,7 +27,7 @@ public class NQueens {
      * 从第row行开始摆放皇后
      */
     void place(int row) {
-        // 如果摆到了最后一层则成功，计数
+        // 如果摆好了最后一层则成功，计数
         if (row == queens.length) {
             ways++;
             show();
@@ -49,7 +49,7 @@ public class NQueens {
 
 
     /**
-     * 检查第row行col列，是否能摆放皇后 （剪枝函数）
+     * 检查第row行col列，是否能摆放皇后 （剪枝函数，时间复杂度：O(n)）
      */
     boolean isValid(int row, int col) {
         // 遍历前面每行皇后的位置
@@ -59,7 +59,7 @@ public class NQueens {
             // 在同一条对角线（两个斜线），第i行的皇后跟第row行第col列格子处在同一对角线上
             // 公式就是 x1 - x2 / y1 - y2 = 1或者-1，代表在一个对角线上，也就是x1 - x2的绝对值 = y1 - y2的绝对值
             if (row - i == Math.abs(col - queens[i])) return false;
-    }
+        }
         return true;
     }
 
