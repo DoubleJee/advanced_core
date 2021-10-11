@@ -10,7 +10,7 @@ public class Knapsack {
 
 
     public static void main(String[] args) {
-        // 不同贪心策略
+        // 不同的贪心策略
         // 价值主导 优先选择价值最高的放入背包
         selected("价值主导", (a1, a2) -> a2.value - a1.value);
 
@@ -35,14 +35,13 @@ public class Knapsack {
         };
         // 背包重量，存放价值
         int weight = 150, value = 0;
-        // 选择的物品
+        // 选择放入的物品
         List<Article> selectedArticles = new ArrayList<>();
 
         // 根据贪心策略，每次选最优物品，以确保价值最大
         Arrays.sort(articles, comparator);
 
         for (int i = 0; i < articles.length; i++) {
-            // 放不下物品
             if (weight < articles[i].weight) continue;
 
             // 放入背包
