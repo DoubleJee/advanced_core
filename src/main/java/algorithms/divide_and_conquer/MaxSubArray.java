@@ -50,6 +50,7 @@ public class MaxSubArray {
     /**
      * 求[begin, end) 中最大连续子序列的和
      * 一分为二，最大和要么在左边部分，要么在右边部分，要么左右边界相连（两边都有）的部分
+     * 时间复杂度：O(nlogn) = 2 * T(n / 2) + O(n); a = 2, b = 2, d = 1, d = logb(a)，所以是O(nlogn)
      */
     static int dacMaxSubArray(int [] nums, int begin, int end) {
         // 递归基，子序列个数小于2，那它就是最大子序列和
