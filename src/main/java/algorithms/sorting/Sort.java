@@ -1,5 +1,6 @@
 package algorithms.sorting;
 
+import algorithms.sorting.comparison.SelectionSort;
 import algorithms.sorting.comparison.ShellSort;
 import algorithms.sorting.comparison.model.Student;
 import algorithms.sorting.nocmp.BucketSort;
@@ -101,6 +102,8 @@ public abstract class Sort<E> implements Comparable<Sort<E>> {
         if (this instanceof CountingSort) return true;
         if (this instanceof RadixSort) return true;
         if (this instanceof BucketSort) return true;
+        // 选择排序在特殊情况 还是无法保证稳定
+        if (this instanceof SelectionSort) return false;
 
         Student[] students = new Student[20];
         for (int i = 0; i < students.length; i++) {

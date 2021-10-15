@@ -16,7 +16,7 @@ public class SelectionSort<E> extends Sort<E> {
             int maxIndex = 0;
             // 从头到尾开始比较
             for (int begin = 1; begin <= end; begin++) {
-                // 找最大的，为了保证算法稳定性，相等的两个元素，在后面的属于大的
+                // 找最大的，为了保证算法稳定性，相等的两个元素，在后面的属于大的 （最后发现还是保证不了稳定，例如：[10, 10, 2, 4, 2]）
                 if (cmp(begin, maxIndex) >= 0) {
                     maxIndex = begin;
                 }
