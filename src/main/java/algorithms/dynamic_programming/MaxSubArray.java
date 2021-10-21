@@ -15,7 +15,7 @@ public class MaxSubArray {
      * dp(0) = nums[0]
      * dp(i) = max {dp(i - 1) + nums[i], nums[i]}，  当前结尾最优解，是前一个结尾最优解加上自己，或者不加
      *
-     * 最终的解是 max{dp(0),...,dp(nums.length - 1)}
+     * 最终的解是 max{dp(0), ..., dp(nums.length - 1)}，  所有可能结尾的最优选择中最大的
      * 空间、时间复杂度：O(n)
      */
     static int maxSubArray(int [] nums) {
