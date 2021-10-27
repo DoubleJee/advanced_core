@@ -9,7 +9,7 @@ public class LCS {
 
     /**
      * dp(i, j) = nums1前i个元素和nums2前j个元素的最长公共子序列长度
-     * dp(i, 0) = dp(0, j) = 0      （因为另外一个子序列的长度为0，肯定没有公共子序列）
+     * dp(i, 0)、 dp(0, j) = 0      （因为另外一个子序列的长度为0，肯定没有公共子序列）
      *
      * 如果nums1[i - 1] == nums2[j - 1]，那么 dp(i, j) = dp(i - 1, j - 1) + 1                第i个元素和第j个元素相等，就拿除去它俩的最长公共子序列 + 1，就是dp(i - 1, j - 1) + 1
      * 如果nums1[i - 1] != nums2[j - 1]，那么 dp(i, j) = max{dp(i - 1, j), dp(i, j - 1)}     第i个元素和第j个元素不相等，那就看看包含i的最长公共子序列 和 包含j的最长公共子序列，哪个大取哪个; 之前的加上第i个对比的（i, j - 1）、之前的加上第j个对比的（i - 1, j），都是i,j的前一个小规模状态
@@ -111,7 +111,7 @@ public class LCS {
     static int lcs4(int[] nums1, int[] nums2) {
         if (nums1 == null || nums1.length == 0) return 0;
         if (nums2 == null || nums2.length == 0) return 0;
-        // 基于一维数组优化，可以选择长度短的作为列（数）来看，来节省一维数组的长度
+        // 根据研究的表格，基于一维数组优化，可以选择长度短的作为列（数）来看，来节省一维数组的长度     （长度短的作为一维数组长度）
         int[] rowsNums = nums1, colsNums = nums2;
         if (nums1.length < nums2.length) {
             rowsNums = nums2;
