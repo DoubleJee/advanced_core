@@ -60,7 +60,7 @@ public class LCS {
     static int lcs2(int[] nums1, int[] nums2) {
         if (nums1 == null || nums1.length == 0) return 0;
         if (nums2 == null || nums2.length == 0) return 0;
-        // 根据研究的表格，每次求状态的时候只需要用到两行数据，上一行和当前行，之前的数据都没用了，所以使用滚动数组  （求每个状态使用其左斜、前面、上面三个值，共两行数据）
+        // 根据研究的二维表格，每次求状态的时候只需要用到两行数据，上一行和当前行，之前的数据都没用了，所以使用滚动数组  （求每个状态使用其左斜、前面、上面三个值，共两行数据）
         int[][] dp = new int[2][nums2.length + 1];
         for (int i = 1; i <= nums1.length; i++) {
             // 上一行、当前行
@@ -84,7 +84,7 @@ public class LCS {
     static int lcs3(int[] nums1, int[] nums2) {
         if (nums1 == null || nums1.length == 0) return 0;
         if (nums2 == null || nums2.length == 0) return 0;
-        // 根据研究的表格，每次求状态的时候只需要用到上一行数据，之前的数据都没用了，因此使用一维数组，再加一个leftTop变量用来存储要被覆盖的左上角 （求每个状态使用其左斜、前面、上面三个值，左斜和上面是上一行数据，再加上其前一个状态的值）
+        // 根据研究的二维表格，每次求状态的时候只需要用到上一行数据，之前的数据都没用了，因此使用一维数组，再加一个leftTop变量用来存储要被覆盖的左上角 （求每个状态使用其左斜、前面、上面三个值，左斜和上面是上一行数据，再加上其前一个状态的值）
         int[] dp = new int[nums2.length + 1];
         for (int i = 1; i <= nums1.length; i++) {
             // 左斜   （存储会被覆盖找不到的左斜）
@@ -111,7 +111,7 @@ public class LCS {
     static int lcs4(int[] nums1, int[] nums2) {
         if (nums1 == null || nums1.length == 0) return 0;
         if (nums2 == null || nums2.length == 0) return 0;
-        // 根据研究的表格，基于一维数组优化，可以选择长度短的作为列（数）来看，来节省一维数组的长度     （长度短的作为一维数组长度）
+        // 根据研究的二维表格，基于一维数组优化，可以选择长度短的作为列（数）来看，来节省一维数组的长度     （长度短的作为一维数组长度）
         int[] rowsNums = nums1, colsNums = nums2;
         if (nums1.length < nums2.length) {
             rowsNums = nums2;
