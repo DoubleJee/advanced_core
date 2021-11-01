@@ -60,6 +60,7 @@ public class LCSubString {
         int[] dp = new int[colChars.length + 1];
         int max = dp[0];
         for (int i = 1; i <= rowChars.length; i++) {
+            // 因为求状态只会用到上一行数据，不会用到同一行的数据，可以从后往前求状态，去除leftTop变量
             int leftTop = dp[0];
             for (int j = 1; j <= colChars.length; j++) {
                 int tempLeftTop = leftTop;

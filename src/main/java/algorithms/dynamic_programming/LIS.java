@@ -33,4 +33,41 @@ public class LIS {
         }
         return max;
     }
+
+
+
+    // 二分搜索 + 牌顶法 时间复杂度：O(nlogn)
+    static int lisBinary(int [] nums) {
+        if (nums == null || nums.length < 1) return 0;
+
+        // 牌堆数量
+        int len = 0;
+        // 牌顶数组
+        int[] top = new int[nums.length];
+
+
+        // 遍历每张牌，寻找第一个大于等于自己的牌顶，并放上去替换成为这个牌堆的新牌顶，如果没有，则创建一个新的牌堆并将自己设为牌顶
+        // 牌顶之间是有序的，可以使用二分搜索，查找第一个大于等于自己的牌顶位置
+        for (int num : nums) {      // n
+            int begin = 0;
+            int end = len;
+            // 寻找第一个大于等于num的牌顶位置
+            while (begin < end) {   // logn
+                int mid = (begin + end) >> 1;
+                if (num <= top[mid]) {
+                    end = mid;
+                } else {
+                    begin = mid + 1;
+                }
+            }
+
+            // 覆盖牌顶
+            top[begin] = num;
+            // 检查是否是新建一个了牌堆     （如果找到的位置是超出的，就是新建了）
+            if (begin == len) len++;
+        }
+
+        // 最后牌堆数量就是最长上升子序列长度
+        return len;
+    }
 }
