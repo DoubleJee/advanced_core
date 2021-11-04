@@ -80,25 +80,27 @@ public class BloomFilter<T> {
     }
 
     /**
-     * 设置index位置的二进制为1
+     * 设置index位置的二进制为1      （bit定位顺序 数组从左往右，Long的bit从右往左，   也就是第1位bit，在数组0位置，在Long的低位二进制数起第1个位置，第64位，在数组0位置，在Long的第0个位置）
      */
     private void setBit(int index) {
         // bit所在数组下标
-        int arrayIndex = bits.length - 1 - (index / Long.SIZE);
+        int arrayIndex = index / Long.SIZE;
         // bit所在Long位置
         int bitIndex = index % Long.SIZE;
+        // 将bit设为1
         bits[arrayIndex] |= 1 << bitIndex;
     }
 
     /**
-     * 获取index位置的二进制
+     * 获取index位置的二进制       （bit定位顺序 数组从左往右，Long的bit从右往左，   也就是第1位bit，在数组0位置，在Long的低位二进制数起第1个位置，第64位，在数组0位置，在Long的第0个位置）
      * @return true为1，false为0
      */
     private boolean getBit(int index) {
         // bit所在数组下标
-        int arrayIndex = bits.length - 1 - (index/ Long.SIZE);
+        int arrayIndex = index / Long.SIZE;
         // bit所在Long位置
         int bitIndex = index % Long.SIZE;
+        // 获取bit值
         return (bits[arrayIndex] & (1 << bitIndex)) != 0;
     }
 
