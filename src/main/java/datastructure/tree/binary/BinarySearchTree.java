@@ -56,6 +56,7 @@ public class BinarySearchTree<E extends Comparable> extends AbstractBinaryTree<E
         } else {
             parent.left = newNode;
         }
+        size++;
 
         afterAdd(newNode);
     }
