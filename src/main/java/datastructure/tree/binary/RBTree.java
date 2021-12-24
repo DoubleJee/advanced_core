@@ -186,7 +186,7 @@ public class RBTree<E extends Comparable> extends BalancedBinarySearchTree<E>{
 
         }else {
             // 兄弟节点是RED
-            // 对parent - sibling - 删除节点相对的sibling的远邻节点（就是真正要变为兄弟节点的它的另外一边的节点）进行相应情况的旋转，将sibling节点染成黑色，parent节点染成红色
+            // 对parent - sibling - 删除节点相对的sibling的远邻节点（就是真正要变为兄弟节点的它的另外一边的节点）（也可以理解为sibling的子节点中，和删除节点是相对方向的节点）进行相应情况的旋转，将sibling节点染成黑色，parent节点染成红色
             // 经过旋转会得到正确的兄弟节点，sibling会成为整棵子树的新BLACK根节点，子节点指向之前的父节点（变为了RED），父节点带着正确的兄弟节点，指向自己
             if (sibling.isLeftChildOfParent()){
                 // LL
