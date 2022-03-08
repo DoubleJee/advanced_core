@@ -16,5 +16,27 @@ public class GraphTest {
 
         graph.print();
 
+        graph.bfs("V0");
+    }
+
+
+    // 无向图
+    void undirectedGraph() {
+        ListGraph<String, Integer> graph = new ListGraph<>();
+        graph.addEdge("V0", "V1");
+        graph.addEdge("V1", "V0");
+
+        graph.addEdge("V0", "V2");
+        graph.addEdge("V2", "V0");
+
+        graph.addEdge("V0", "V3");
+        graph.addEdge("V3", "V0");
+
+        graph.addEdge("V1", "V2");
+        graph.addEdge("V2", "V1");
+
+        graph.addEdge("V2", "V3");
+        graph.addEdge("V3", "V2");
+
     }
 }

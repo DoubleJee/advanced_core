@@ -24,4 +24,7 @@ public interface Graph<V, E> {
     // 删除边
     void removeEdge(V from, V to);
 
+    // 广度优先搜索
+    void bfs(V begin);
+
 }

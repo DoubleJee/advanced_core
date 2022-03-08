@@ -1,5 +1,7 @@
 package datastructure.graph;
 
+import datastructure.linear.queue.Queue;
+
 import java.util.*;
 
 // 邻接表
@@ -107,6 +109,36 @@ public class ListGraph<V, E> implements Graph<V, E> {
         if (fromVertex.outEdges.remove(edge)) {
             toVertex.inEdges.remove(edge);
             edges.remove(edge);
+        }
+
+    }
+
+    @Override
+    public void bfs(V begin) {
+        // 开始顶点
+        Vertex<V, E> beginVertex = vertices.get(begin);
+        if (beginVertex == null) return;
+
+        // 遍历队列、已遍历集合
+        Queue<Vertex<V, E>> queue = new Queue<>();
+        Set<Vertex<V, E>> visitedVertices = new HashSet<>();
+        // 入队的，都认为已经遍历了
+        queue.enQueue(beginVertex);
+        visitedVertices.add(beginVertex);
+
+        while (!queue.isEmpty()) {
+            // 遍历
+            Vertex<V, E> vertex = queue.deQueue();
+            System.out.println(vertex);
+
+            // 将下一层未遍历过的放入队列
+            for (Edge<V, E> edge : vertex.outEdges) {
+                if (visitedVertices.contains(edge.to)) continue;
+
+                // 入队就认为已经遍历过
+                queue.enQueue(edge.to);
+                visitedVertices.add(edge.to);
+            }
         }
 
     }
