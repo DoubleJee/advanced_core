@@ -27,4 +27,6 @@ public interface Graph<V, E> {
     // 广度优先搜索
     void bfs(V begin);
 
+    // 深度优先搜索
+    void dfs(V begin);
 }

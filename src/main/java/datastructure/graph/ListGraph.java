@@ -115,6 +115,8 @@ public class ListGraph<V, E> implements Graph<V, E> {
 
     @Override
     public void bfs(V begin) {
+        // bfs类似于二叉树的层序遍历
+
         // 开始顶点
         Vertex<V, E> beginVertex = vertices.get(begin);
         if (beginVertex == null) return;
@@ -129,7 +131,7 @@ public class ListGraph<V, E> implements Graph<V, E> {
         while (!queue.isEmpty()) {
             // 遍历
             Vertex<V, E> vertex = queue.deQueue();
-            System.out.println(vertex);
+            System.out.println(vertex.value);
 
             // 将下一层未遍历过的放入队列
             for (Edge<V, E> edge : vertex.outEdges) {
@@ -141,6 +143,37 @@ public class ListGraph<V, E> implements Graph<V, E> {
             }
         }
 
+    }
+
+    @Override
+    public void dfs(V begin) {
+        // 开始顶点
+        Vertex<V, E> beginVertex = vertices.get(begin);
+        if (beginVertex == null) return;
+
+        // 已遍历集合
+        Set<Vertex<V, E>> visitedVertices = new HashSet<>();
+        // 从开始顶点开始深度优先遍历
+        dfs(beginVertex, visitedVertices);
+    }
+
+
+    // 深度优先遍历顶点
+    private void dfs(Vertex<V, E> vertex, Set<Vertex<V, E>> visitedVertices) {
+        // dfs类似于二叉树的前序遍历
+
+        System.out.println(vertex.value);
+        // 已遍历该顶点
+        visitedVertices.add(vertex);
+
+        // 深度遍历他的每条顶点路径
+        for (Edge<V, E> edge : vertex.outEdges) {
+            // 该条顶点路径已经遍历
+            if (visitedVertices.contains(edge.to)) continue;
+
+            // 深度遍历这条顶点路径
+            dfs(edge.to, visitedVertices);
+        }
     }
 
     public void print() {
