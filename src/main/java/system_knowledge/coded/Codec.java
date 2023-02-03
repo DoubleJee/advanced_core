@@ -41,7 +41,7 @@ public class Codec {
      *
      *
      *
-     *      Java的字符串类 String 中的内容是 UNICODE 字符串：
+     *      Java的字符串类 String 中的内容是 UNICODE 字符串；也就是存储了一组 UNICODE 整数编号  （char存储的是 UNICODE 整数编号，jdk1.9之后String里是byte数组，优化了存储空间）
      *
      */
 
